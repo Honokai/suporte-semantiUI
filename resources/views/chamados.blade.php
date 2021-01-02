@@ -4,7 +4,7 @@
 
 <div class="ui relaxed divided list">
     @foreach ($chamados as $chamado)
-    <div class="item" onclick="abrirModal({{$chamado->id}})" style="cursor: pointer">
+    <div class="item" onclick="abrirModal({{$chamado->id}})" style="cursor: pointer; padding: 10px">
         <i class="large github middle aligned icon"></i>
         <div class="content">
             <a class="header">{{$chamado->setor->setor}} - {{$chamado->categoria->categoria}} </a>

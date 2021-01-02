@@ -9,3 +9,7 @@ Utilização da versão simplificada do sistema de autenticação provido pelo *
 
 ## Para quê serve?
 Software de gestão de tickets, simples e ituitivo para utilização de uma equipe de ti, ou demais setores.
+
+## Imagens da aplicação
+
+![Tela de visualização de chamados](/imagem/vchamado.png)

@@ -15,7 +15,7 @@
     @if(!isset($navbar))
     <div class="ui top attached menu">
         <div class="item">
-            <img src="https://semantic-ui.com/images/new-school.jpg">
+            <img src="/imagem/padrao.png">
         </div>
         <div class="ui dropdown icon item">
             <i class="wrench icon"></i>
