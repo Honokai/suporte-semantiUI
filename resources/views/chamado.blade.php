@@ -8,31 +8,54 @@
         font-size: 15px;
         line-height: 1.5rem;
     }
+    .dados-chamado {
+        background-color: rgb(255, 255, 255); 
+        color: black;
+        padding: 3px 10px 3px 10px; 
+        border-radius: 0.28571429rem;
+    }
 </style>
 <div style="display:flex; flex-direction: row; padding: 10px">
     <div class="ui medium image" style="flex:1; padding: 10px 7px 5px 7px; background-color: rgb(63, 116, 230); border-radius: 10px; margin: 0px 5px 0px 5px">
         <div class="modal-header">
             <div>
                 <b>Solicitação:</b><br/>
-                <span style="background-color: rgb(255, 255, 255); color: gray; padding: 3px; border-radius: 25px">{{$chamado->id}}</span> 
+                <span class="dados-chamado">{{$chamado->id}}</span> 
             </div>
             <div>
                 <b>Solicitante:</b> <br/>
-                <span style="background-color: rgb(255, 255, 255); color: gray; padding: 3px; border-radius: 25px">{{$chamado->solicitante->name}}</span>
+            </div>
+            <div style="border-radius: 0.28571429rem;font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif; border: 0; background-color: white; line-height: 1.31428571em;
+            padding: 10px; color: black; max-height: 38px !important; max-width: 214px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+                {{$chamado->solicitante->name}}
             </div>
             <div>
                 <b>Setor:</b> <br/>
-                <span style="background-color: rgb(255, 255, 255); color: gray; padding: 3px; border-radius: 25px">{{$chamado->setor->setor}}</span>
+            </div>
+            <div style="border-radius: 0.28571429rem;font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif; border: 0; background-color: white; line-height: 1.31428571em;
+            padding: 10px; color: black; max-height: 38px !important; max-width: 214px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+                {{$chamado->setor->setor}}
             </div>
             <div>
                 <b>Localizacao:</b> <br/>
-                <span style="background-color: rgb(255, 255, 255); color: gray; padding: 3px; border-radius: 25px">{{$chamado->localizacao->localizacao}}</span>
+            </div>
+            <div style="border-radius: 0.28571429rem;font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif; border: 0; background-color: white; line-height: 1.31428571em;
+            padding: 10px; color: black; max-height: 38px !important; max-width: 214px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+                {{$chamado->localizacao->localizacao}}
+            </div>
+            <div>
+                <b>Categoria:</b> <br/>
+            </div>
+            <div style="border-radius: 0.28571429rem;font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif; border: 0; background-color: white; line-height: 1.31428571em;
+            padding: 10px; color: black; max-height: 38px !important; max-width: 214px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+                {{$chamado->categoria->categoria}}
             </div>
         </div>
     </div>
     <div style="flex:3">
         <div class="ui form">
             <div class="field">
+                @if (Auth::user()->id == $chamado->solicitante->id || Auth::user()->setor_id == $chamado->setor->id)
                 <form id="form_chamado">
                     @csrf
                     <label>Descreva o problema/situação:</label>
@@ -44,6 +67,7 @@
                         <input type="file" id="file" style="display:none">
                     </div>
                 </form>
+                @endif
             </div>
         </div>
         <div class="scrolling image content" style="max-height: 280px">
@@ -58,7 +82,7 @@
                         <div class="content">
                             <a class="author">{{$mensagem->remetente->name}}</a>
                             <div class="metadata">
-                            <span class="date">{{$mensagem->created_at}}</span>
+                            <span class="date">{{date( 'd/m/Y H:i', strtotime($mensagem->created_at))}}</span>
                             </div>
                             <div class="text">
                             {{$mensagem->mensagem}}
@@ -75,10 +99,21 @@
     </div>
 </div>
 <div class="actions">
+    @if (Auth::user()->setor_id == $chamado->setor->id)
+    <button class="ui negative right labeled icon button" 
+    onclick="enviarMensagem({remetente_id: {{ Auth::user()->id}}, 
+    chamado_id: {{$chamado->id}}})">
+    Encerrar chamado
+    <i class="checkmark icon"></i>
+</button>
+    @endif
+    @if (Auth::user()->id == $chamado->solicitante->id || Auth::user()->setor_id == $chamado->setor->id)
     <button class="ui positive right labeled icon button" 
         onclick="enviarMensagem({remetente_id: {{ Auth::user()->id}}, 
         chamado_id: {{$chamado->id}}})">
         Enviar mensagem
-        <i class="checkmark icon"></i>
+        <i class="paper plane icon"></i>
     </button>
+    @endif
+    
 </div>

@@ -22,7 +22,7 @@
             <div class="menu">
                 <div class="item">
                     <i class="dropdown icon"></i>
-                    <span class="text" onclick="abrirModal(`Novo chamado`)">Novo chamado</span>
+                    <span class="text" onclick="abrirModal(0)">Novo chamado</span>
                     <div class="menu">
                         <div class="item">Document</div>
                         <div class="item">Image</div>
@@ -39,9 +39,13 @@
                 <div class="header">
                     Export
                 </div>
-                <div class="item">
-                    Share...
-                </div>
+                <form class="item" method="POST" action="http://localhost:8000/sair" onclick="this.submit()">
+                    @csrf
+                    <a
+                        href="http://localhost:8000/sair" onclick="event.preventDefault();
+                        this.closest('form').submit();"
+                    >Sair</a>
+                </form>
             </div>
         </div>
         <div class="ui dropdown icon item">

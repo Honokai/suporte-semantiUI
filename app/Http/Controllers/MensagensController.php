@@ -14,7 +14,6 @@ class MensagensController extends Controller
         $novaMensagem->chamado_id = $request->chamado_id;
         $novaMensagem->remetente_id = $request->remetente_id;
         $novaMensagem->save();
-
         return view('mensagem')->with('mensagem', $novaMensagem);
     }
 }
