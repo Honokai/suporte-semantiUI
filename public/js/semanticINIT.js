@@ -71,17 +71,23 @@ function enviarMensagem(informacao = {remetente, ...demais}) {
 function enviarFormularioAbertura() {
     let form = new FormData;
     let xml = new XMLHttpRequest;
+    let arquivos = document.getElementById('file').files;
     form.append('solicitante_id', document.getElementById('solicitante_id').value);
     form.append('categoria_id', document.getElementById('categoria_id').value);
     form.append('setor_id', document.getElementById('setor_id').value);
     form.append('localizacao_id', document.getElementById('localizacao_id').value);
     form.append('mensagem', document.getElementById('mensagem').value);
+    for (let i = 0; i < arquivos.length; i++) {
+        let arquivo = arquivos[i]
+        form.append('anexos[]', arquivo)
+    }
     xml.open('POST', '/chamados');
     xml.setRequestHeader("X-CSRF-TOKEN", document.querySelector('#modal > div:nth-child(4) > div.ui.medium.image > div > div:nth-child(1) > input[type=hidden]:nth-child(4)').value)
     xml.send(form);
     xml.addEventListener('load', () => {
         if(xml.status == 200) {
-            window.location.reload()
+            //window.location.reload()
+            console.log(xml.responseText)
         } else {
             console.log(xml.responseText)
         }

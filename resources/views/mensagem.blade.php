@@ -5,7 +5,7 @@
     <div class="content">
         <a class="author">{{$mensagem->remetente->name}}</a>
         <div class="metadata">
-        <span class="date">{{date('Y-m-d', strtotime($mensagem->created_at))}}</span>
+        <span class="date">{{date('d/m/Y H:i', strtotime($mensagem->created_at))}}</span>
         </div>
         <div class="text">
         {{$mensagem->mensagem}}

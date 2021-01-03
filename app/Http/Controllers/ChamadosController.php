@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\StatusTipo;
+use App\Models\Anexos;
 use App\Models\Chamados;
 use App\Models\Mensagens;
 use Illuminate\Http\Request;
@@ -30,12 +32,24 @@ class ChamadosController extends Controller
         $chamado->setor_id = $request->setor_id;
         $chamado->categoria_id = $request->categoria_id;
         $chamado->localizacao_id = $request->localizacao_id;
+        $chamado->status = StatusTipo::ABERTO;
         $chamado->save();
         $mensagem = new Mensagens;
         $mensagem->mensagem = $request->mensagem;
         $mensagem->chamado_id = $chamado->id;
         $mensagem->remetente_id = $request->solicitante_id;
         $chamado->mensagens()->save($mensagem);
+        if($request->hasFile('anexos')) {
+            $anexo = new Anexos;
+            foreach($request->file('anexos') as $arquivo) {
+                $caminho = $arquivo->store("\\anexos\\{$chamado->id}");
+                if($caminho) {
+                    $anexo->anexo = str_replace('/','\\',$caminho);
+                    $anexo->chamados_id = $chamado->id;
+                    $anexo->save();
+                }
+            }
+        }
         return view('chamados')->with("chamados", Chamados::all());
     }
 
@@ -46,6 +60,10 @@ class ChamadosController extends Controller
             $chamado->categoria_id = $request->id;
             $chamado->setor_id = $request->setor_id;
             $chamado->localizacao_id = $request->localizacao->id;
+            $chamado->update();
+        } 
+        if($request->has('status') && StatusTipo::coerce($request->status)) {
+            $chamado->status = StatusTipo::coerce($request->status);
             $chamado->update();
         }
         return view('chamados')->with("chamados", Chamados::all());

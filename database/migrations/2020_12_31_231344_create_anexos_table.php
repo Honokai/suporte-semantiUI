@@ -16,7 +16,7 @@ class CreateAnexosTable extends Migration
         Schema::create('anexos', function (Blueprint $table) {
             $table->id();
             $table->string("anexo")->nullable(false);
-            $table->foreignId('chamado_id')->nullable(false);
+            $table->foreignId('chamados_id')->nullable(false);
             $table->timestamps();
         });
     }

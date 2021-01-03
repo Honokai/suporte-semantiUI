@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Testing view</title>
+    <title>{{$titulo}}</title>
     <link rel="stylesheet" href="/css/semantic.css">
     <script src="/js/jquery.min.js"></script>
     <script src="/js/semantic.min.js"></script>
@@ -20,16 +20,18 @@
         <div class="ui dropdown icon item">
             <i class="wrench icon"></i>
             <div class="menu">
+                <!--
                 <div class="item">
                     <i class="dropdown icon"></i>
-                    <span class="text" onclick="abrirModal(0)">Novo chamado</span>
+                    <span class="text">Arquivo</span>
                     <div class="menu">
                         <div class="item">Document</div>
                         <div class="item">Image</div>
                     </div>
                 </div>
-                <div class="item">
-                    Open...
+                -->
+                <div class="item" onclick="abrirModal(0)">
+                    Novo chamado
                 </div>
                 <div class="item">
                     Save...

@@ -19,6 +19,7 @@ class CreateChamadosTable extends Migration
             $table->foreignId('categoria_id')->constrained('categorias')->nullable(false);
             $table->foreignId('setor_id')->constrained('setores')->nullable(false);
             $table->foreignId('localizacao_id')->constrained('localizacoes')->nullable(false);
+            $table->string('status')->nullable(false);
             $table->timestamps();
         });
     }

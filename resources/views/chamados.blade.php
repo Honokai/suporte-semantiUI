@@ -1,4 +1,4 @@
-@extends('templates.layout')
+@extends('templates.layout', ["titulo"=> "Suporte - Chamados"])
 
 @section('conteudo')
 
@@ -7,7 +7,7 @@
     <div class="item" onclick="abrirModal({{$chamado->id}})" style="cursor: pointer; padding: 10px">
         <i class="large github middle aligned icon"></i>
         <div class="content">
-            <a class="header">{{$chamado->setor->setor}} - {{$chamado->categoria->categoria}} </a>
+            <a class="header">{{$chamado->setor->setor}} - {{$chamado->categoria->categoria}} ({{$chamado->status}})  </a>
             <div class="description">{{$chamado->mensagens[0]->mensagem}}</div>
         </div>
     </div>

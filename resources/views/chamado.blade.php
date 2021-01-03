@@ -64,8 +64,11 @@
                         <label for="file" class="ui icon button" style="max-width: 200px">
                             <i class="file icon"></i>
                             Anexar arquivo</label>
-                        <input type="file" id="file" style="display:none">
+                        <input name="anexos[]" type="file" id="file" style="display:none">
                     </div>
+                    @foreach ($chamado->anexos as $anexo)
+                        <a href="{{asset('storage'.$anexo->anexo)}}"> Anexo</a>
+                    @endforeach
                 </form>
                 @endif
             </div>
@@ -99,15 +102,30 @@
     </div>
 </div>
 <div class="actions">
-    @if (Auth::user()->setor_id == $chamado->setor->id)
+    @if (Auth::user()->setor_id == $chamado->setor->id && $chamado->status != 'encerrado')
+    <form method="POST" action="{{ route('chamados.update', ['chamado' => $chamado->id]) }}" hidden>
+        @csrf
+        @method('put')
+        <input name="status" type="text" value="encerrado">
+    </form>
     <button class="ui negative right labeled icon button" 
-    onclick="enviarMensagem({remetente_id: {{ Auth::user()->id}}, 
-    chamado_id: {{$chamado->id}}})">
-    Encerrar chamado
-    <i class="checkmark icon"></i>
-</button>
+    onclick="this.previousElementSibling.submit()">
+        Encerrar chamado
+        <i class="checkmark icon"></i>
+    </button>
+    @elseif(Auth::user()->setor_id == $chamado->setor->id && $chamado->status == 'encerrado')
+    <form method="POST" action="{{ route('chamados.update', ['chamado' => $chamado->id]) }}" hidden>
+        @csrf
+        @method('put')
+        <input name="status" type="text" value="reaberto">
+    </form>
+    <button class="ui negative right labeled icon button" 
+    onclick="this.previousElementSibling.submit()">
+        Reabrir chamado
+        <i class="checkmark icon"></i>
+    </button>
     @endif
-    @if (Auth::user()->id == $chamado->solicitante->id || Auth::user()->setor_id == $chamado->setor->id)
+    @if ((Auth::user()->id == $chamado->solicitante->id || Auth::user()->setor_id == $chamado->setor->id) && $chamado->status != 'encerrado')
     <button class="ui positive right labeled icon button" 
         onclick="enviarMensagem({remetente_id: {{ Auth::user()->id}}, 
         chamado_id: {{$chamado->id}}})">

@@ -74,7 +74,7 @@
                     <label for="file" class="ui icon button" style="max-width: 200px">
                         <i class="file icon"></i>
                         Anexar arquivo</label>
-                    <input type="file" id="file" style="display:none">
+                    <input name="anexos[]" type="file" id="file" style="display:none">
                 </div>
             </div>
         </div>
