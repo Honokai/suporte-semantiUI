@@ -39,10 +39,13 @@ class ChamadosController extends Controller
         $mensagem->chamado_id = $chamado->id;
         $mensagem->remetente_id = $request->solicitante_id;
         $chamado->mensagens()->save($mensagem);
+        
         if($request->hasFile('anexos')) {
             $anexo = new Anexos;
             foreach($request->file('anexos') as $arquivo) {
-                $caminho = $arquivo->store("\\anexos\\{$chamado->id}");
+                # armazena o arquivo em si e salva o caminho
+                # em uma variavel para armazenamento no banco
+                $caminho = $arquivo->store("\\anexos\\{$chamado->id}", ['disk' => 'public']);
                 if($caminho) {
                     $anexo->anexo = str_replace('/','\\',$caminho);
                     $anexo->chamados_id = $chamado->id;
@@ -50,6 +53,7 @@ class ChamadosController extends Controller
                 }
             }
         }
+
         return view('chamados')->with("chamados", Chamados::all());
     }
 

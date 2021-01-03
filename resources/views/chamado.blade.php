@@ -66,9 +66,16 @@
                             Anexar arquivo</label>
                         <input name="anexos[]" type="file" id="file" style="display:none">
                     </div>
-                    @foreach ($chamado->anexos as $anexo)
-                        <a href="{{asset('storage'.$anexo->anexo)}}"> Anexo</a>
-                    @endforeach
+                    <div class="ui very relaxed horizontal list">
+                        @foreach ($chamado->anexos as $anexo)
+                        <div class="item">
+                            <img class="ui avatar image" src="https://semantic-ui.com/images/avatar/small/daniel.jpg">
+                            <div class="content">
+                            <a class="header" href="{{asset('storage'.$anexo->anexo)}}" target="_blank">{{\File::extension($anexo->anexo)}}</a>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>                    
                 </form>
                 @endif
             </div>

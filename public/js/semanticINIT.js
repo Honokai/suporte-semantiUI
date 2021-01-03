@@ -44,10 +44,15 @@ function abrirModal(id) {
 function enviarMensagem(informacao = {remetente, ...demais}) {
     let xml = new XMLHttpRequest
     let formulario = new FormData;
+    let arquivos = document.getElementById('file').files;
     formulario.append('_token', document.querySelector('#modal > div:nth-child(4) > div:nth-child(2) > div.ui.form > div > form > input[type=hidden]').value)
     formulario.append('remetente_id', informacao.remetente_id)
     formulario.append('chamado_id', informacao.chamado_id)
     formulario.append('mensagem', document.getElementById('mensagem').value)
+    for (let i = 0; i < arquivos.length; i++) {
+        let arquivo = arquivos[i]
+        formulario.append('anexos[]', arquivo)
+    }
     xml.open('POST', '/mensagens')
     xml.setRequestHeader("X-CSRF-TOKEN", document.querySelector('#modal > div:nth-child(4) > div:nth-child(2) > div.ui.form > div > form > input[type=hidden]').value);
     xml.send(formulario)
@@ -86,8 +91,7 @@ function enviarFormularioAbertura() {
     xml.send(form);
     xml.addEventListener('load', () => {
         if(xml.status == 200) {
-            //window.location.reload()
-            console.log(xml.responseText)
+            window.location.reload()
         } else {
             console.log(xml.responseText)
         }

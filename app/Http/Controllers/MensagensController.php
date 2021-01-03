@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\StatusTipo;
+use App\Models\Anexos;
 use App\Models\Chamados;
 use App\Models\Mensagens;
 use App\Models\User;
@@ -27,6 +28,20 @@ class MensagensController extends Controller
             # caso o chamado ainda não tenha sido atendido, então colocará o mesmo em estado de em andamento
             if($chamado->status == "aberto" && $usuario->setor->id == $chamado->setor_id) {
                 $chamado->status = StatusTipo::ANDAMENTO;
+            }
+            # mensagem pode ter anexo, caso tenha irá inserir no banco
+            if($request->hasFile('anexos')) {
+                $anexo = new Anexos;
+                foreach($request->file('anexos') as $arquivo) {
+                    # armazena o arquivo em si e salva o caminho
+                    # em uma variavel para armazenamento no banco
+                    $caminho = $arquivo->store("\\anexos\\{$chamado->id}", ['disk' => 'public']);
+                    if($caminho) {
+                        $anexo->anexo = str_replace('/','\\', $caminho);
+                        $anexo->chamados_id = $chamado->id;
+                        $anexo->save();
+                    }
+                }
             }
             # verifica se foi possivel atualizar as informações de chamado
             # se sim salva a mensagem.
