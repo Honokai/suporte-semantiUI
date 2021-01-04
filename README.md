@@ -13,3 +13,6 @@ Software de gestão de tickets, simples e ituitivo para utilização de uma equi
 ## Imagens da aplicação
 
 ![Tela de visualização de chamados](/imagem/vchamado.png)
+
+### DB
+![Tela de visualização de chamados](/imagem/Suporte.png)
