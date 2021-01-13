@@ -1,1 +1,1 @@
-@extends('templates.layout',['titulo', "Início"])
+@extends('templates.layout',['titulo'=> "Início"])
