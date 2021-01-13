@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Categoria;
+use App\Models\Setores;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CategoriaFactory extends Factory
@@ -22,7 +23,10 @@ class CategoriaFactory extends Factory
     public function definition()
     {
         return [
-            //
+            "categoria" => $this->faker->name,
+            "setor_id" => function(){
+                return Setores::factory()->state(['setor'=> $this->faker->name])->create()->id;
+            }
         ];
     }
 }

@@ -11,7 +11,7 @@ class Mensagens extends Model
 
     public function chamado()
     {
-        return $this->belongsTo(Chamado::class, 'chamado_id', 'id');
+        return $this->belongsTo(Chamados::class, 'chamado_id', 'id');
     }
 
     public function remetente()

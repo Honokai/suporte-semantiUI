@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Mensagens;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class MensagensFactory extends Factory
@@ -22,7 +23,7 @@ class MensagensFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'remetente_id' => User::factory()->create()->id
         ];
     }
 }

@@ -22,7 +22,7 @@ class LocalizacaoFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'localizacao' => $this->faker->name
         ];
     }
 }
