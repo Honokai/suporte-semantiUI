@@ -6,13 +6,15 @@ use App\Enums\StatusTipo;
 use App\Models\Anexos;
 use App\Models\Chamados;
 use App\Models\Mensagens;
+use App\Models\Setores;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ChamadosController extends Controller
 {
     public function index()
     {
-        return view('chamados')->with("chamados", Chamados::orderByDesc('created_at')->get());
+        return view('chamados')->with("chamados", Chamados::orderBy('status')->orderByDesc('created_at')->get());
     }
 
     public function show($id)
@@ -71,5 +73,13 @@ class ChamadosController extends Controller
             $chamado->update();
         }
         return view('chamados')->with("chamados", Chamados::all());
+    }
+
+    public function showChamadoSetor($setor)
+    {
+        $setor = Setores::select('id')->where('setor', ''.$setor.'')->get();
+        return view('chamados')
+            ->with('chamados', Chamados::where('setor_id', $setor[0]->id)
+            ->get());
     }
 }

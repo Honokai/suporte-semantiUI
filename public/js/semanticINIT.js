@@ -1,5 +1,12 @@
 window.addEventListener('load', () => {
     $('.ui.dropdown').dropdown();
+    /*
+    $('.browse.item').popup({
+        popup: '.menu.popup',
+        distanceAway: -5,
+        hoverable: true
+    });
+    */
 })
 
 function abrirModal(id) {

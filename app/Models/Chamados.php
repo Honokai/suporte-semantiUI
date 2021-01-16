@@ -29,6 +29,11 @@ class Chamados extends Model
         return $this->hasMany(Mensagens::class, 'chamado_id', 'id');
     }
 
+    public function ultimaMensagem()
+    {
+        return $this->hasMany(Mensagens::class, 'chamado_id', 'id')->latest();
+    }
+
     public function anexos()
     {
         return $this->hasMany(Anexos::class);

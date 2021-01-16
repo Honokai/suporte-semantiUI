@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChamadosController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,7 +20,7 @@ Route::get('/', function () {
 
 Route::resource('chamados', 'App\Http\Controllers\ChamadosController')->middleware(['auth']);
 Route::resource('mensagens', 'App\Http\Controllers\MensagensController')->middleware(['auth']);
-
+Route::get('chamados/setor/{setorId}', [ChamadosController::class, 'showChamadoSetor']);
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');

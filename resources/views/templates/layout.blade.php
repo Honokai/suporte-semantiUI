@@ -41,10 +41,10 @@
                 <div class="header">
                     Export
                 </div>
-                <form class="item" method="POST" action="http://localhost:8000/sair" onclick="this.submit()">
+                <form class="item" method="POST" action="/sair" onclick="this.submit()">
                     @csrf
                     <a
-                        href="http://localhost:8000/sair" onclick="event.preventDefault();
+                        href="/sair" onclick="event.preventDefault();
                         this.closest('form').submit();"
                     >Sair</a>
                 </form>
