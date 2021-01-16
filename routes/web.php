@@ -18,8 +18,13 @@ Route::get('/', function () {
     return view('inicio');
 });
 
-Route::resource('chamados', 'App\Http\Controllers\ChamadosController')->middleware(['auth']);
-Route::resource('mensagens', 'App\Http\Controllers\MensagensController')->middleware(['auth']);
+Route::middleware('auth')->group(function(){    
+    Route::resource('chamados', 'App\Http\Controllers\ChamadosController');
+    Route::resource('mensagens', 'App\Http\Controllers\MensagensController');
+    Route::resource('categorias', 'App\Http\Controllers\CategoriaController');
+});
+
+
 Route::get('chamados/setor/{setorId}', [ChamadosController::class, 'showChamadoSetor']);
 Route::get('/dashboard', function () {
     return view('dashboard');
