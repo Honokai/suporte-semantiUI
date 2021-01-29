@@ -58,10 +58,8 @@
                                 <div class="center aligned header">Aberto</div>
                                 <div class="center aligned description" style="padding: 50px 0px; font-size: 25px">
                                     {{  
-                                        $chamados->groupBy('setor_id')->has([Auth::user()->setor_id]) &&
-                                        $chamados->groupBy('setor_id')[Auth::user()->setor_id]->groupBy('status')->has(['aberto'])?
-                                            $chamados->groupBy('setor_id')[Auth::user()->setor_id]->groupBy('status')['aberto']->count() : 
-                                            '0'
+                                        $setor->groupBy('status')->has(['aberto'])?
+                                            $setor->groupBy('status')['aberto']->count() : '0'
                                     }}
                                 </div>
                             </div>
@@ -73,10 +71,8 @@
                                 <div class="center aligned header">Em andamento</div>
                                 <div class="center aligned description" style="padding: 50px 0px; font-size: 25px">
                                     {{  
-                                        $chamados->groupBy('setor_id')->has([Auth::user()->setor_id]) &&
-                                        $chamados->groupBy('setor_id')[Auth::user()->setor_id]->groupBy('status')->has(['em andamento'])?
-                                            $chamados->groupBy('setor_id')[Auth::user()->setor_id]->groupBy('status')['em andamento']->count() : 
-                                            '0'
+                                       $setor->groupBy('status')->has(['em andamento'])?
+                                            $setor->groupBy('status')['em andamento']->count() : '0'
                                     }}
                                 </div>
                             </div>
@@ -88,10 +84,8 @@
                                 <div class="center aligned header">Fechado</div>
                                 <div class="center aligned description" style="padding: 50px 0px; font-size: 25px">
                                     {{  
-                                        $chamados->groupBy('setor_id')->has([Auth::user()->setor_id]) &&
-                                        $chamados->groupBy('setor_id')[Auth::user()->setor_id]->groupBy('status')->has(['encerrado'])?
-                                            $chamados->groupBy('setor_id')[Auth::user()->setor_id]->groupBy('status')['encerrado']->count() : 
-                                            '0'
+                                        $setor->groupBy('status')->has(['encerrado'])?
+                                            $setor->groupBy('status')['encerrado']->count() : '0'
                                     }}
                                 </div>
                             </div>
@@ -103,10 +97,8 @@
                                 <div class="center aligned header">Reaberto</div>
                                 <div class="center aligned description" style="padding: 50px 0px; font-size: 25px">
                                     {{  
-                                        $chamados->groupBy('setor_id')->has([Auth::user()->setor_id]) &&
-                                        $chamados->groupBy('setor_id')[Auth::user()->setor_id]->groupBy('status')->has(['reaberto'])?
-                                            $chamados->groupBy('setor_id')[Auth::user()->setor_id]->groupBy('status')['reaberto']->count() : 
-                                            '0'
+                                        $setor->groupBy('status')->has(['reaberto'])?
+                                            $setor->groupBy('status')['reaberto']->count() : '0'
                                     }}
                                 </div>
                             </div>

@@ -29,7 +29,9 @@ Route::middleware('auth')->group(function(){
 
 Route::get('chamados/setor/{setorId}', [ChamadosController::class, 'showChamadoSetor']);
 Route::get('/dashboard', function () {
-    return view('dashboard')->with("chamados", Chamados::where('solicitante_id', Auth::user()->id)->get());
+    return view('dashboard')
+        ->with("chamados", Chamados::where('solicitante_id', Auth::user()->id)->get())
+        ->with("setor", Chamados::where('setor_id', Auth::user()->setor_id)->get());
 })->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';
