@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ChamadosController;
+use App\Models\Chamados;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,7 +29,7 @@ Route::middleware('auth')->group(function(){
 
 Route::get('chamados/setor/{setorId}', [ChamadosController::class, 'showChamadoSetor']);
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('dashboard')->with("chamados", Chamados::where('solicitante_id', Auth::user()->id)->get());
 })->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';
