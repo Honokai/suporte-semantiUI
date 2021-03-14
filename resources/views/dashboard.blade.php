@@ -57,7 +57,7 @@
                             <div class="content">
                                 <div class="center aligned header">Aberto</div>
                                 <div class="center aligned description" style="padding: 50px 0px; font-size: 25px">
-                                    {{  
+                                    {{
                                         $setor->groupBy('status')->has(['aberto'])?
                                             $setor->groupBy('status')['aberto']->count() : '0'
                                     }}
