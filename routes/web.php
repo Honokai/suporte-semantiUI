@@ -28,6 +28,7 @@ Route::middleware('auth')->group(function(){
 
 
 Route::get('chamados/setor/{setorId}', [ChamadosController::class, 'showChamadoSetor']);
+
 Route::get('/dashboard', function () {
     return view('dashboard')
         ->with("chamados", Chamados::where('solicitante_id', Auth::user()->id)->get())

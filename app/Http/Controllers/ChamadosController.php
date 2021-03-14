@@ -7,6 +7,7 @@ use App\Models\Anexos;
 use App\Models\Chamados;
 use App\Models\Mensagens;
 use App\Models\Setores;
+use ErrorException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -82,9 +83,14 @@ class ChamadosController extends Controller
 
     public function showChamadoSetor($setor)
     {
-        $setor = Setores::select('id')->where('setor', ''.$setor.'')->get();
-        return view('chamados')
-            ->with('chamados', Chamados::where('setor_id', $setor[0]->id)
-            ->get());
+        try {
+            $setor = Setores::select('id')->where('setor', ''.$setor.'')->get();
+            return view('chamados')
+                ->with('chamados', Chamados::where('setor_id', $setor[0]->id)
+                ->get());
+        } catch(ErrorException $excecao) {
+            return view('chamados')->with('chamados', []);
+        }
+        
     }
 }
