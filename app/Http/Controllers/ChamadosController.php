@@ -14,7 +14,12 @@ class ChamadosController extends Controller
 {
     public function index()
     {
-        return view('chamados')->with("chamados", Chamados::orderBy('status')->orderByDesc('created_at')->get());
+        return view('chamados')
+            ->with("chamados",
+                Chamados::orderBy('status')
+                    ->orderByDesc('created_at')
+                        ->get()
+            );
     }
 
     public function show($id)
