@@ -45,7 +45,7 @@
                     <div class="default text">Informe a localização:</div>
                     <div class="menu">
                         @foreach($localizacoes->all() as $localizacao)
-                        <div class="item" data-value="{{$localizacao->id}}"> {{$localizacao->localizacao}}</div>
+                            <div class="item" data-value="{{$localizacao->id}}"> {{$localizacao->localizacao}}</div>
                         @endforeach
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                     <div class="default text">Categoria do problema:</div>
                     <div class="menu">
                         @foreach($categorias->all() as $categoria)
-                        <div class="item" data-value="{{$categoria->id}}"> {{$categoria->categoria}}</div>
+                        <div class="item" data-value="{{$categoria->id}}"> {{$categoria->setor->setor}} - {{$categoria->categoria}}</div>
                         @endforeach
                     </div>
                 </div>
