@@ -48,7 +48,7 @@
             </div>
             <div style="border-radius: 0.28571429rem;font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif; border: 0; background-color: white; line-height: 1.31428571em;
             padding: 10px; color: black; max-height: 38px !important; max-width: 214px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
-                {{$chamado->categoria->categoria}}
+                {{$chamado->categoria->setor->setor}} - {{$chamado->categoria->categoria}}
             </div>
         </div>
     </div>
