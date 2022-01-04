@@ -18,7 +18,7 @@
     @foreach ($categorias as $categoria)
           <tr>
             <td>{{$categoria->categoria}}</td>
-            <td>{{$categoria->setor->setor}}</td>
+            <td>{{$categoria->setor->nome}}</td>
             <td>
                 <form style="display: inline" action="{{route('categorias.destroy',['categoria'=>$categoria->id])}}" method="POST">
                     @csrf

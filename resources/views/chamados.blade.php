@@ -10,7 +10,7 @@
     >
         <i class="large github middle aligned icon"></i>
         <div class="content">
-            <a class="header">{{$chamado->setor->setor}} - {{$chamado->categoria->categoria}} ({{$chamado->status}}) 
+            <a class="header">{{$chamado->setor->nome}} - {{$chamado->categoria->categoria}} ({{$chamado->status}}) 
                 @if($chamado->ultimaMensagem[0]->remetente_id != Auth::user()->id && 
                     $chamado->setor_id == Auth::user()->setor_id)
                     <b style="color: black; background-color: yellow; padding: 2px 10px; border-radius: 5px">Nova mensagem</b>

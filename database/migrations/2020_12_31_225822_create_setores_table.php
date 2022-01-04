@@ -16,9 +16,9 @@ class CreateSetoresTable extends Migration
     {
         Schema::create('setores', function (Blueprint $table) {
             $table->id();
-            $table->string('setor');
-            $table->foreignIdFor(User::class, 'responsavel')->default(1);
-            $table->enum('cargo', ['colaborador', 'gestor', 'estagiario']);
+            $table->string('nome');
+            // $table->foreignIdFor(User::class, 'gestor')->default(1);
+            // $table->enum('cargo', ['colaborador', 'gestor', 'estagiario']);
             $table->timestamps();
         });
     }

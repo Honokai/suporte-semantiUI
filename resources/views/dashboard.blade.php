@@ -1,4 +1,4 @@
-@extends('templates.layout', ['titulo'=>"Visão geral"])
+@extends('templates.layout', ['titulo'=>"Visão geral", 'navbar' => true])
 @section('conteudo')
     <div>
         <div class="ui container">

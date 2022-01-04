@@ -32,7 +32,7 @@
                     <div class="default text">Selecione o setor</div>
                     <div class="menu">
                         @foreach($setores->all() as $setor)
-                        <div class="item" data-value="{{$setor->id}}">{{$setor->setor}}</div>
+                        <div class="item" data-value="{{$setor->id}}">{{$setor->nome}}</div>
                         @endforeach
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                     <div class="default text">Categoria do problema:</div>
                     <div class="menu">
                         @foreach($categorias->all() as $categoria)
-                        <div class="item" data-value="{{$categoria->id}}"> {{$categoria->setor->setor}} - {{$categoria->categoria}}</div>
+                        <div class="item" data-value="{{$categoria->id}}"> {{$categoria->setor->nome}} - {{$categoria->categoria}}</div>
                         @endforeach
                     </div>
                 </div>

@@ -24,6 +24,7 @@ Route::middleware('auth')->group(function(){
     Route::resource('chamados', 'App\Http\Controllers\ChamadosController');
     Route::resource('mensagens', 'App\Http\Controllers\MensagensController');
     Route::resource('categorias', 'App\Http\Controllers\CategoriaController');
+    Route::resource('setores', 'App\Http\Controllers\SetoresController');
 });
 
 

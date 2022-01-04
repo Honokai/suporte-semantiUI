@@ -12,7 +12,7 @@
                 <a class="item">Funcionalidades</a>
                 <a class="item">Demonstração</a>
                 @if (Auth::check())
-                <a class="item" href="/chamados/setor/{{Auth::user()->setor->setor}}">Chamados</a>
+                <a class="item" href="/chamados/setor/{{Auth::user()->setor->nome}}">Chamados</a>
                 @endif
             </div>
         </div>
