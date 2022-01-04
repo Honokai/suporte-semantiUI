@@ -19,8 +19,8 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->enum('nivel', ['admin', 'comum'])->default('comum');
             $table->rememberToken();
-            $table->foreignId('setor_id')->default(1)->constrained('setores');
             $table->timestamps();
         });
     }

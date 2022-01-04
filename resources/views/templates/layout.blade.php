@@ -38,9 +38,28 @@
                 </div>
                 <div class="item">Edit Permissions</div>
                 <div class="divider"></div>
-                <div class="header">
-                    Export
-                </div>
+                @if (Auth::user()->nivel == 'admin')
+                    <div class="header">
+                        Administração
+                    </div>
+                    <div class="item">
+                        <i class="dropdown icon"></i>
+                        <span class="text">Categoria</span>
+                        <div class="menu">
+                            <div class="item">Nova</div>
+                            <div class="item">Gerenciar</div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <i class="dropdown icon"></i>
+                        <span class="text">Setor</span>
+                        <div class="menu">
+                            <div class="item">Novo</div>
+                            <div class="item">Gerenciar</div>
+                        </div>
+                    </div>
+                @endif
+                
                 <form class="item" method="POST" action="/sair" onclick="this.submit()">
                     @csrf
                     <a
