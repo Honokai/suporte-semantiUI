@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\StatusTipo;
+use App\Http\Requests\ChamadoStoreRequest;
 use App\Models\Anexos;
 use App\Models\Chamados;
 use App\Models\Mensagens;
@@ -33,7 +34,7 @@ class ChamadosController extends Controller
         return view('novoChamado');
     }
 
-    public function store(Request $request)
+    public function store(ChamadoStoreRequest $request)
     {
         $chamado = new Chamados;
         $chamado->solicitante_id = $request->solicitante_id;

@@ -1,4 +1,4 @@
-@extends('templates.layout',['titulo'=> "Início", 'navbar' => true])
+@extends('templates.layout',['titulo'=> "Início"])
 
 @section('conteudo')
     <div class="ui text attached menu">
@@ -12,7 +12,7 @@
                 <a class="item">Funcionalidades</a>
                 <a class="item">Demonstração</a>
                 @if (Auth::check())
-                <a class="item" href="/chamados/setor/{{Auth::user()->setor->nome}}">Chamados</a>
+                    <a class="item" href="/chamados/setor/{{Auth::user()->setor->nome}}">Chamados</a>
                 @endif
             </div>
         </div>

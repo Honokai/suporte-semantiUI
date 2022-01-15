@@ -41,35 +41,37 @@
                     </div>
                     <div class="item">Edit Permissions</div>
                     <div class="divider"></div>
-                    @if (Auth::user()->nivel == 'admin')
-                        <div class="header">
-                            Administração
-                        </div>
-                        <div class="item">
-                            <i class="dropdown icon"></i>
-                            <span class="text">Categoria</span>
-                            <div class="menu">
-                                <a href="#" class="item">Nova</a>
-                                <a href="#" class="item">Gerenciar</a>
+                    @auth
+                        @if (Auth::user()->nivel == 'admin')
+                            <div class="header">
+                                Administração
                             </div>
-                        </div>
-                        <div class="item">
-                            <i class="dropdown icon"></i>
-                            <span class="text">Setor</span>
-                            <div class="menu">
-                                <a href="{{route('setores.create')}}" class="item">Novo</a>
-                                <a href="#" class="item">Gerenciar</a>
+                            <div class="item">
+                                <i class="dropdown icon"></i>
+                                <span class="text">Categoria</span>
+                                <div class="menu">
+                                    <a href="#" class="item">Nova</a>
+                                    <a href="#" class="item">Gerenciar</a>
+                                </div>
                             </div>
-                        </div>
-                        <div class="item">
-                            <i class="dropdown icon"></i>
-                            <span class="text">Usuário</span>
-                            <div class="menu">
-                                <div class="item">Novo</div>
-                                <div class="item">Gerenciar</div>
+                            <div class="item">
+                                <i class="dropdown icon"></i>
+                                <span class="text">Setor</span>
+                                <div class="menu">
+                                    <a href="{{route('setores.create')}}" class="item">Novo</a>
+                                    <a href="#" class="item">Gerenciar</a>
+                                </div>
                             </div>
-                        </div>
-                    @endif
+                            <div class="item">
+                                <i class="dropdown icon"></i>
+                                <span class="text">Usuário</span>
+                                <div class="menu">
+                                    <div class="item">Novo</div>
+                                    <div class="item">Gerenciar</div>
+                                </div>
+                            </div>
+                        @endif
+                    @endauth
                     
                     <form class="item" method="POST" action="/sair" onclick="this.submit()">
                         @csrf
