@@ -28,7 +28,7 @@ class ChamadoStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'solicitante' => 'integer|required',
+            'solicitante_id' => 'integer|required',
             'categoria_id' => 'integer|required',
             'setor_id' => 'integer|required',
             'localizacao_id' => 'integer|required',

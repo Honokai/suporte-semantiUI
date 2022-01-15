@@ -95,9 +95,10 @@ function enviarFormularioAbertura() {
     }
     xml.open('POST', '/chamados');
     xml.setRequestHeader("X-CSRF-TOKEN", document.querySelector('#modal > div:nth-child(4) > div.ui.medium.image > div > div:nth-child(1) > input[type=hidden]:nth-child(4)').value)
+    xml.setRequestHeader('Accept', 'application/json')
     xml.send(form);
     xml.addEventListener('load', () => {
-        if(xml.status == 200) {
+        if(xml.status === 200) {
             window.location.reload()
         } else {
             console.log(xml.responseText)
