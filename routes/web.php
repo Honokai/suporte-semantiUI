@@ -20,15 +20,16 @@ Route::get('/', function () {
     return view('inicio');
 });
 
-Route::middleware('auth')->group(function(){    
-    Route::resource('chamados', 'App\Http\Controllers\ChamadosController');
+Route::middleware('auth')->group(function(){
+    Route::resource('chamados', 'App\Http\Controllers\ChamadosController')->except('index', 'show');
     Route::resource('mensagens', 'App\Http\Controllers\MensagensController');
     Route::resource('categorias', 'App\Http\Controllers\CategoriaController');
     Route::resource('setores', 'App\Http\Controllers\SetoresController');
 });
 
 
-Route::get('chamados/setor/{setorId}', [ChamadosController::class, 'showChamadoSetor']);
+Route::get('chamados/{nomeSetor}', [ChamadosController::class, 'index']);
+Route::get('chamado/{id}', [ChamadosController::class, 'show']);
 
 Route::get('/dashboard', function () {
     return view('dashboard')

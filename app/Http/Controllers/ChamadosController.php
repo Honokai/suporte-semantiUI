@@ -9,19 +9,26 @@ use App\Models\Chamados;
 use App\Models\Mensagens;
 use App\Models\Setores;
 use ErrorException;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ChamadosController extends Controller
 {
-    public function index()
+    public function index(string $setor): View
     {
         return view('chamados')
-            ->with("chamados",
-                Chamados::orderBy('status')
-                    ->orderByDesc('created_at')
-                        ->get()
-            );
+            ->with('chamados', Chamados::where(
+                'setor_id',
+                Setores::select('id')->where('nome', $setor)->get()->first()->id
+            )->get());
+
+        // return view('chamados')
+        //     ->with("chamados",
+        //         Chamados::orderBy('status')
+        //             ->orderByDesc('created_at')
+        //                 ->get()
+        //     );
     }
 
     public function show($id)
@@ -48,12 +55,11 @@ class ChamadosController extends Controller
         $mensagem->chamado_id = $chamado->id;
         $mensagem->remetente_id = $request->solicitante_id;
         $chamado->mensagens()->save($mensagem);
-        
+
         if($request->hasFile('anexos')) {
             $anexo = new Anexos;
             foreach($request->file('anexos') as $arquivo) {
-                # armazena o arquivo em si e salva o caminho
-                # em uma variavel para armazenamento no banco
+                # armazena o arquivo em si e salva o caminho para armazenamento no banco
                 $caminho = $arquivo->store("\\anexos\\{$chamado->id}", ['disk' => 'public']);
                 if($caminho) {
                     $anexo->anexo = str_replace('/','\\',$caminho);
@@ -74,7 +80,7 @@ class ChamadosController extends Controller
             $chamado->setor_id = $request->setor_id;
             $chamado->localizacao_id = $request->localizacao->id;
             $chamado->update();
-        } 
+        }
         if($request->has('status') && StatusTipo::coerce($request->status)) {
             $chamado->status = StatusTipo::coerce($request->status);
             $chamado->update();
@@ -92,6 +98,6 @@ class ChamadosController extends Controller
         } catch(ErrorException $excecao) {
             return view('chamados')->with('chamados', []);
         }
-        
+
     }
 }

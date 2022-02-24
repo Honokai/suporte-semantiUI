@@ -12,7 +12,7 @@ window.addEventListener('load', () => {
 function abrirModal(id) {
     if(id > 0){
         let xml = new XMLHttpRequest
-        xml.open('GET', `/chamados/${id}`)
+        xml.open('GET', `/chamado/${id}`)
         xml.send()
         xml.addEventListener('load', () => {
             if(xml.status == 200) {
@@ -20,7 +20,7 @@ function abrirModal(id) {
                 $('.longer.modal').modal({
                     centered: false,
                     onApprove : function() {
-                      return false; 
+                      return false;
                     }
                   }).modal('show');
             } else {
@@ -36,16 +36,16 @@ function abrirModal(id) {
                 document.getElementById('modal').innerHTML = xml.responseText
                 $('.longer.modal').modal({
                     onApprove : function() {
-                      return false; 
+                      return false;
                     }
                   }).modal('show');
-                  $('.ui.selection.dropdown').dropdown({clearable: true}); 
+                  $('.ui.selection.dropdown').dropdown({clearable: true});
             } else {
                 document.getElementById('modal').innerHTML = "Algo deu errado"
             }
-        }) 
+        })
     }
-    
+
 }
 
 function enviarMensagem(informacao = {remetente, ...demais}) {
@@ -69,7 +69,7 @@ function enviarMensagem(informacao = {remetente, ...demais}) {
             document.getElementById('conversa').lastChild.style.transition = '1s'
             document.getElementById('conversa').lastChild.style.backgroundColor = 'yellow'
             document.getElementById('conversa').lastChild.style.padding = '10px'
-            setTimeout(function(){ 
+            setTimeout(function(){
                 document.getElementById('conversa').lastChild.style.backgroundColor = 'white'
                 document.getElementById('conversa').lastChild.style.padding = '0'
             }, 5000)
