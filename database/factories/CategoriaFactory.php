@@ -24,9 +24,7 @@ class CategoriaFactory extends Factory
     {
         return [
             "categoria" => $this->faker->name,
-            "setor_id" => function(){
-                return Setores::factory()->state(['setor'=> $this->faker->name])->create()->id;
-            }
+            "setor_id" => Setores::all()->random()
         ];
     }
 }

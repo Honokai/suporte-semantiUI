@@ -29,7 +29,7 @@ class SetoresFactory extends Factory
         ]);
 
         return [
-            'setor' => $setores->random()
+            'nome' => $setores->random()
         ];
     }
 }
