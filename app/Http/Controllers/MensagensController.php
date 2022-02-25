@@ -26,7 +26,7 @@ class MensagensController extends Controller
             $usuario = User::find($request->remetente_id);
             $chamado->updated_at = date('Y-m-d H:i:s');
             # caso o chamado ainda não tenha sido atendido, então colocará o mesmo em estado de em andamento
-            if($chamado->status == "aberto" && $usuario->setor->id == $chamado->setor_id) {
+            if($chamado->status == "aberto" && $usuario->setor->id == $chamado->categoria->setor->id) {
                 $chamado->status = StatusTipo::ANDAMENTO;
             }
             # mensagem pode ter anexo, caso tenha irá inserir no banco

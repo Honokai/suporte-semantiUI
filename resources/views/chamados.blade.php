@@ -12,7 +12,8 @@
         <div class="content">
             <a class="header">{{$chamado->setor->nome}} - {{$chamado->categoria->categoria}} ({{$chamado->status}})
                 @if($chamado->ultimaMensagem[0]->remetente_id != Auth::user()->id &&
-                    $chamado->setor_id == Auth::user()->setor_id)
+                    ($chamado->categoria->setor->id == Auth::user()->setor_id || $chamado->solicitante_id == Auth::user()->id) &&
+                    $chamado->status != 'aberto')
                     <b style="color: black; background-color: yellow; padding: 2px 10px; border-radius: 5px">Nova mensagem</b>
                 @endif
             </a>

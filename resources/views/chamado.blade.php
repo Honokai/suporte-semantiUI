@@ -14,6 +14,20 @@
         padding: 3px 10px 3px 10px;
         border-radius: 0.28571429rem;
     }
+    .campos-item {
+        border-radius: 0.28571429rem;
+        font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        border: 0;
+        background-color: white;
+        line-height: 1.31428571em;
+        padding: 10px;
+        color: black;
+        max-height: 38px !important;
+        max-width: 214px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
 </style>
 <div style="display:flex; flex-direction: row; padding: 10px">
     <div class="ui medium image" style="flex:1; padding: 10px 7px 5px 7px; background-color: rgb(63, 116, 230); border-radius: 10px; margin: 0px 5px 0px 5px">
@@ -25,29 +39,25 @@
             <div>
                 <b>Solicitante:</b> <br/>
             </div>
-            <div style="border-radius: 0.28571429rem;font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif; border: 0; background-color: white; line-height: 1.31428571em;
-            padding: 10px; color: black; max-height: 38px !important; max-width: 214px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+            <div class="campos-item">
                 {{$chamado->solicitante->name}}
             </div>
             <div>
                 <b>Setor:</b> <br/>
             </div>
-            <div style="border-radius: 0.28571429rem;font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif; border: 0; background-color: white; line-height: 1.31428571em;
-            padding: 10px; color: black; max-height: 38px !important; max-width: 214px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+            <div class="campos-item">
                 {{$chamado->setor->nome}}
             </div>
             <div>
                 <b>Localizacao:</b> <br/>
             </div>
-            <div style="border-radius: 0.28571429rem;font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif; border: 0; background-color: white; line-height: 1.31428571em;
-            padding: 10px; color: black; max-height: 38px !important; max-width: 214px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+            <div class="campos-item">
                 {{$chamado->localizacao->localizacao}}
             </div>
             <div>
                 <b>Categoria:</b> <br/>
             </div>
-            <div style="border-radius: 0.28571429rem;font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif; border: 0; background-color: white; line-height: 1.31428571em;
-            padding: 10px; color: black; max-height: 38px !important; max-width: 214px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+            <div class="campos-item">
                 {{$chamado->categoria->setor->nome}} - {{$chamado->categoria->categoria}}
             </div>
         </div>
@@ -92,13 +102,11 @@
                             <div class="content">
                                 <a class="author">{{$mensagem->remetente->name}}</a>
                                 <div class="metadata">
-                                    <span class="date">{{date( 'd/m/Y H:i', strtotime($mensagem->created_at))}}</span>
+                                    <span class="date">{{date('d/m/Y H:i', strtotime($mensagem->created_at))}}</span>
                                 </div>
-                                <div class="text">
-                                    {{$mensagem->mensagem}}
-                                </div>
+                                <div class="ui visible message" style="white-space: pre-wrap">{{$mensagem->mensagem}}</div>
                                 <div class="actions">
-                                <a class="reply">Reply</a>
+                                    <a class="reply">Reply</a>
                                 </div>
                             </div>
                         </div>
