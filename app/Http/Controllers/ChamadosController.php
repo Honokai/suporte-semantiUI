@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\StatusTipo;
 use App\Http\Requests\ChamadoStoreRequest;
 use App\Models\Anexos;
+use App\Models\Categoria;
 use App\Models\Chamados;
 use App\Models\Mensagens;
 use App\Models\Setores;
@@ -18,17 +19,10 @@ class ChamadosController extends Controller
     public function index(string $setor): View
     {
         return view('chamados')
-            ->with('chamados', Chamados::where(
-                'setor_id',
-                Setores::select('id')->where('nome', $setor)->get()->first()->id
-            )->get());
-
-        // return view('chamados')
-        //     ->with("chamados",
-        //         Chamados::orderBy('status')
-        //             ->orderByDesc('created_at')
-        //                 ->get()
-        //     );
+            ->with(
+                'chamados',
+                Setores::where('nome', $setor)->get()->first()->chamados()->get()
+            );
     }
 
     public function show($id)

@@ -14,4 +14,9 @@ class Setores extends Model
         'responsavel',
         'cargo'
     ];
+
+    public function chamados()
+    {
+        return $this->hasManyThrough(Chamados::class, Categoria::class, 'setor_id', 'categoria_id', 'id');
+    }
 }

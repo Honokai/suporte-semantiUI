@@ -15,4 +15,9 @@ class Categoria extends Model
     {
         return $this->belongsTo(Setores::class);
     }
+
+    public function chamados()
+    {
+        return $this->hasMany(Chamados::class, 'categoria_id', 'id');
+    }
 }
