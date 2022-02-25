@@ -1,4 +1,9 @@
-@extends('templates.layout', ['titulo' => "Criar categoria"])
+@extends('templates.layout', ['titulo' => "Criar categoria", 'navbar' => true])
 @section('conteudo')
-    formulario
+    <form action="{{route('categorias.store')}}" method="POST">
+        @csrf
+        <input type="text">
+        <input type="text">
+        <button></button>
+    </form>
 @endsection

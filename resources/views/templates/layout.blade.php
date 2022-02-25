@@ -45,7 +45,7 @@
                                 <i class="dropdown icon"></i>
                                 <span class="text">Categoria</span>
                                 <div class="menu">
-                                    <a href="#" class="item">Nova</a>
+                                    <a href="{{route('categorias.create')}}" class="item">Nova</a>
                                     <a href="#" class="item">Gerenciar</a>
                                 </div>
                             </div>
