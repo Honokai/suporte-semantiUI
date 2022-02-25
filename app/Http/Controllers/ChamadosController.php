@@ -7,6 +7,7 @@ use App\Http\Requests\ChamadoStoreRequest;
 use App\Models\Anexos;
 use App\Models\Categoria;
 use App\Models\Chamados;
+use App\Models\Localizacao;
 use App\Models\Mensagens;
 use App\Models\Setores;
 use ErrorException;
@@ -18,21 +19,28 @@ class ChamadosController extends Controller
 {
     public function index(string $setor): View
     {
-        return view('chamados')
+        // dd(Chamados::find(1)->transferencias()->get()->first()->setorOrigem()->get()->nome);
+        return view("chamados")
             ->with(
-                'chamados',
-                Setores::where('nome', $setor)->get()->first()->chamados()->get()
+                "chamados",
+                Setores::where("nome", $setor)->get()->first()->chamados()->get()
             );
     }
 
     public function show($id)
     {
-        return view('chamado')->with("chamado", Chamados::find($id));
+        return view("chamado")->with(["chamado" => Chamados::find($id), "categorias" => Categoria::all()]);
     }
 
     public function create()
     {
-        return view('novoChamado');
+        return view("novoChamado")->with(
+            [
+                "setores" => Setores::all(),
+                "localizacoes" => Localizacao::all(),
+                "categorias" => Categoria::all()
+            ]
+        );
     }
 
     public function store(ChamadoStoreRequest $request)

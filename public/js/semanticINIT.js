@@ -23,6 +23,7 @@ function abrirModal(id) {
                       return false;
                     }
                   }).modal('show');
+                  ativarDropdown()
             } else {
                 document.getElementById('modal').innerHTML = "Algo deu errado"
             }
@@ -39,7 +40,7 @@ function abrirModal(id) {
                       return false;
                     }
                   }).modal('show');
-                  $('.ui.selection.dropdown').dropdown({clearable: true});
+                  ativarDropdown()
             } else {
                 document.getElementById('modal').innerHTML = "Algo deu errado"
             }
@@ -104,4 +105,9 @@ function enviarFormularioAbertura() {
             console.log(xml.responseText)
         }
     })
+}
+
+function ativarDropdown()
+{
+    $('.ui.selection.dropdown').dropdown({showOnFocus: false});
 }

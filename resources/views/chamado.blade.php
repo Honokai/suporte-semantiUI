@@ -1,6 +1,6 @@
 <i class="close icon"></i>
 <div class="header" id="modal-header">
-    Chamado
+    Chamado - #{{$chamado->id}}
 </div>
 <style>
     .modal-header{
@@ -33,17 +33,13 @@
     <div class="ui medium image" style="flex:1; padding: 10px 7px 5px 7px; background-color: rgb(63, 116, 230); border-radius: 10px; margin: 0px 5px 0px 5px">
         <div class="modal-header">
             <div>
-                <b>Solicitação:</b><br/>
-                <span class="dados-chamado">{{$chamado->id}}</span>
-            </div>
-            <div>
                 <b>Solicitante:</b> <br/>
             </div>
             <div class="campos-item">
                 {{$chamado->solicitante->name}}
             </div>
             <div>
-                <b>Setor:</b> <br/>
+                <b>Setor solicitante:</b> <br/>
             </div>
             <div class="campos-item">
                 {{$chamado->setor->nome}}
@@ -56,10 +52,30 @@
             </div>
             <div>
                 <b>Categoria:</b> <br/>
+                <div class="ui fluid search selection dropdown">
+                    <input type="hidden" id="categoria_id" name="categoria_id" value="{{$chamado->categoria->id}}">
+                    <i class="dropdown icon"></i>
+                    <div class="default text">{{$chamado->categoria->setor->nome}} - {{$chamado->categoria->categoria}}</div>
+                    <div class="menu">
+                        <div class="item" data-value="{{$chamado->categoria->id}}">{{$chamado->categoria->setor->nome}} - {{$chamado->categoria->categoria}}</div>
+                        @foreach($categorias->whereNotIn('id', $chamado->categoria->id) as $categoria)
+                            <div class="item" data-value="{{$categoria->id}}"> {{$categoria->setor->nome}} - {{$categoria->categoria}}</div>
+                        @endforeach
+                    </div>
+                </div>
             </div>
-            <div class="campos-item">
-                {{$chamado->categoria->setor->nome}} - {{$chamado->categoria->categoria}}
-            </div>
+
+            @if($chamado->transferencias()->get()->first())
+                <div>
+                    <b>Transferências:</b> <br/>
+                </div>
+                <div class="ui item">
+                    {{$chamado->categoria->setor->nome}} ->
+                    @foreach ($chamado->transferencias()?->get() as $transferencia)
+                        {{$transferencia->setorDestino->nome}}
+                    @endforeach
+                </div>
+            @endif
         </div>
     </div>
     <div style="flex:3">
@@ -69,7 +85,7 @@
                     <form id="form_chamado">
                         @csrf
                         <label>Descreva o problema/situação:</label>
-                        <textarea id="mensagem" name="mensagem"></textarea>
+                        <textarea id="mensagem" name="mensagem" rows="3"></textarea>
                         <div style="padding: 2px">
                             <label for="file" class="ui icon button" style="max-width: 200px">
                                 <i class="file icon"></i>
@@ -94,7 +110,7 @@
             <div class="description">
                 <div class="ui comments" id="conversa">
                     <h3 class="ui dividing header">Conversa</h3>
-                    @foreach ($chamado->mensagens as $mensagem)
+                    @foreach ($chamado->mensagens()->orderBy('created_at', 'desc')->get() as $mensagem)
                         <div class="comment">
                             <a class="avatar">
                                 <img src="https://semantic-ui.com/images/avatar/small/elliot.jpg">
@@ -153,5 +169,9 @@
             <i class="paper plane icon"></i>
         </button>
     @endif
-
 </div>
+
+<script>
+    console.log('item')
+    $('.ui.selection.dropdown').dropdown({'set selected': '{{$chamado->categoria->setor->nome}} - {{$chamado->categoria->categoria}}'});
+</script>

@@ -1,6 +1,4 @@
-@inject('setores', 'App\Models\Setores')
-@inject('localizacoes', 'App\Models\Localizacao')
-@inject('categorias', 'App\Models\Categoria')
+
 <i class="close icon"></i>
 <div class="header" id="modal-header">
     Novo chamado
@@ -78,7 +76,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 </div>
 <div class="actions">

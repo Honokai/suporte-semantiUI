@@ -23,7 +23,7 @@ class Chamados extends Model
     {
         return $this->belongsTo(Localizacao::class);
     }
-    
+
     public function mensagens()
     {
         return $this->hasMany(Mensagens::class, 'chamado_id', 'id');
@@ -42,5 +42,10 @@ class Chamados extends Model
     public function setor()
     {
         return $this->belongsTo(Setores::class);
+    }
+
+    public function transferencias()
+    {
+        return $this->hasMany(Transferencia::class, 'chamado_id', 'id');
     }
 }

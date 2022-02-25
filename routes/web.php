@@ -29,8 +29,8 @@ Route::middleware('auth')->group(function(){
 });
 
 
-Route::get('chamados/{nomeSetor}', [ChamadosController::class, 'index']);
-Route::get('chamado/{id}', [ChamadosController::class, 'show']);
+Route::get('chamados/{nomeSetor}', [ChamadosController::class, 'index'])->name('chamado.index');
+Route::get('chamado/{id}', [ChamadosController::class, 'show'])->name('chamado.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard')
