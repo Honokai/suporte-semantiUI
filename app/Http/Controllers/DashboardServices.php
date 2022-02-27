@@ -18,7 +18,6 @@ class DashboardServices extends Controller
     public function __invoke(Request $request)
     {
         if($request->setor) {
-            // dd(Setores::find(Auth::user()->setor->id)->chamados->where());
             return view('dashboard.show.chamados')->with(
                 [
                     'chamados'=> Setores::find(Auth::user()->setor->id)->chamados()->where('status', $request->status)->get()
@@ -31,7 +30,6 @@ class DashboardServices extends Controller
                     ->where('status', $request->status)->get()
                 ]
             );
-            // $request->status;
         }
     }
 }
