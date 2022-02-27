@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChamadosController;
+use App\Http\Controllers\DashboardServices;
 use App\Models\Chamados;
 use App\Models\Setores;
 use Illuminate\Support\Facades\Auth;
@@ -26,17 +27,18 @@ Route::middleware('auth')->group(function(){
     Route::resource('mensagens', 'App\Http\Controllers\MensagensController');
     Route::resource('categorias', 'App\Http\Controllers\CategoriaController');
     Route::resource('setores', 'App\Http\Controllers\SetoresController');
+    Route::get('/dashboard/chamados', DashboardServices::class);
+    Route::get('chamados/{nomeSetor}', [ChamadosController::class, 'index'])->name('chamado.index');
+    Route::get('chamado/{id}', [ChamadosController::class, 'show'])->name('chamado.show');
 });
 
-
-Route::get('chamados/{nomeSetor}', [ChamadosController::class, 'index'])->name('chamado.index');
-Route::get('chamado/{id}', [ChamadosController::class, 'show'])->name('chamado.show');
-
 Route::get('/dashboard', function () {
-    return view('dashboard')
+    return view('dashboard.index')
         ->with("chamados", Chamados::where('solicitante_id', Auth::user()->id)->get())
         ->with("setor", Setores::find(Auth::user()->setor_id)->chamados()->get());
 })->middleware(['auth'])->name('dashboard');
+
+
 
 require __DIR__.'/auth.php';
 

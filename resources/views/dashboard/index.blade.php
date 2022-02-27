@@ -1,4 +1,7 @@
 @extends('templates.layout', ['titulo'=>"Visão geral", 'navbar' => true])
+@section('scripts')
+    <script src="/js/dashboard.js"></script>
+@endsection
 @section('conteudo')
     <div>
         <div class="ui container">
@@ -7,7 +10,7 @@
                     <div class="column align center" style="text-align: center; font-size: 25px">Seus chamados</div>
                 </div>
                 <div class="row">
-                    <div class="four wide column">
+                    <div class="four wide column" style="cursor: pointer" onclick="mostrarChamados('aberto')">
                         <div class="ui red card">
                             <div class="content">
                                 <div class="center aligned header">Aberto</div>
@@ -17,7 +20,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="four wide column">
+                    <div class="four wide column" style="cursor: pointer" onclick="mostrarChamados('em andamento')">
                         <div class="ui yellow card">
                             <div class="content">
                                 <div class="center aligned header">Em andamento</div>
@@ -25,9 +28,9 @@
                                     {{$chamados->groupBy('status')->has(['em andamento'])?$chamados->groupBy('status')['em andamento']->count(): '0'}}
                                 </div>
                             </div>
-                        </div>                        
+                        </div>
                     </div>
-                    <div class="four wide column">
+                    <div class="four wide column" style="cursor: pointer" onclick="mostrarChamados('fechado')">
                         <div class="ui green card">
                             <div class="content">
                                 <div class="center aligned header">Fechado</div>
@@ -37,7 +40,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="four wide column">
+                    <div class="four wide column" style="cursor: pointer" onclick="mostrarChamados('reaberto')">
                         <div class="ui black card">
                             <div class="content">
                                 <div class="center aligned header">Reaberto</div>
@@ -52,7 +55,7 @@
                     <div class="column align center" style="text-align: center; font-size: 25px">Chamados do seu setor</div>
                 </div>
                 <div class="row">
-                    <div class="four wide column">
+                    <div class="four wide column" style="cursor: pointer" onclick="mostrarChamados('aberto', '{{Auth::user()->setor->id}}')">
                         <div class="ui red card">
                             <div class="content">
                                 <div class="center aligned header">Aberto</div>
@@ -65,7 +68,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="four wide column">
+                    <div class="four wide column" style="cursor: pointer" onclick="mostrarChamados('em andamento', '{{Auth::user()->setor->id}}')">
                         <div class="ui yellow card">
                             <div class="content">
                                 <div class="center aligned header">Em andamento</div>
@@ -76,14 +79,14 @@
                                     }}
                                 </div>
                             </div>
-                        </div>                        
+                        </div>
                     </div>
-                    <div class="four wide column">
+                    <div class="four wide column" style="cursor: pointer" onclick="mostrarChamados('fechado', '{{Auth::user()->setor->id}}')">
                         <div class="ui green card">
                             <div class="content">
                                 <div class="center aligned header">Fechado</div>
                                 <div class="center aligned description" style="padding: 50px 0px; font-size: 25px">
-                                    {{  
+                                    {{
                                         $setor->groupBy('status')->has(['encerrado'])?
                                             $setor->groupBy('status')['encerrado']->count() : '0'
                                     }}
@@ -91,12 +94,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="four wide column">
+                    <div class="four wide column" style="cursor: pointer" onclick="mostrarChamados('reaberto', '{{Auth::user()->setor->id}}')">
                         <div class="ui black card">
                             <div class="content">
                                 <div class="center aligned header">Reaberto</div>
                                 <div class="center aligned description" style="padding: 50px 0px; font-size: 25px">
-                                    {{  
+                                    {{
                                         $setor->groupBy('status')->has(['reaberto'])?
                                             $setor->groupBy('status')['reaberto']->count() : '0'
                                     }}
@@ -105,6 +108,9 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div id="chamadosList">
+
             </div>
         </div>
     </div>

@@ -9,7 +9,7 @@
     <script src="/js/jquery.min.js"></script>
     <script src="/js/semantic.min.js"></script>
     <script src="/js/semanticINIT.js"></script>
-
+    @yield('scripts')
 </head>
 <body>
     @isset($navbar)
