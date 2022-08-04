@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Setores extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'nome',
+        'responsavel',
+        'cargo'
+    ];
+
+    public function chamados()
+    {
+        return $this->hasManyThrough(Chamados::class, Categoria::class, 'setor_id', 'categoria_id', 'id');
+    }
+}
