@@ -31,7 +31,7 @@ final class ChamadoTable extends PowerGridComponent
             Exportable::make('export')
                 ->striped()
                 ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV),
-            Header::make()->showSearchInput(),
+
             Footer::make()
                 ->showPerPage()
                 ->showRecordCount(),
@@ -64,6 +64,7 @@ final class ChamadoTable extends PowerGridComponent
     {
         return PowerGrid::eloquent()
             ->addColumn('status', fn (Chamados $model) => Str::title($model->status))
+            ->addColumn('data_conclusao', fn (Chamados $model) => $model->data_conclusao ? Carbon::parse($model->data_conclusao)->format('d/m/Y H:i:s') : "")
             ->addColumn('aberto_em', fn (Chamados $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'));
     }
 
@@ -87,8 +88,11 @@ final class ChamadoTable extends PowerGridComponent
                 ->makeInputText('solicitante')
                 ->sortable(),
 
-            Column::make('Aberto em', 'aberto_em'),
+            Column::make('Aberto', 'aberto_em'),
 
+            Column::make('Conclusão', 'data_conclusao'),
+
+            Column::make('Responsavel', 'responsavel')
         ];
     }
 
@@ -108,10 +112,6 @@ final class ChamadoTable extends PowerGridComponent
     public function actions(): array
     {
        return [
-        Button::add('new-modal')
-            ->caption('New window')
-            ->class('bg-gray-300')
-            ->openModal('new', []),
         //    Button::make('edit', 'Edit')
         //        ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
         //        ->route('chamados.edit', ['chamados' => 'id']),
