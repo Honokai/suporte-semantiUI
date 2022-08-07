@@ -1,5 +1,8 @@
 <?php
 
+use App\Enums\StatusTipo;
+use App\Models\Subcategoria;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,12 +18,16 @@ class CreateChamadosTable extends Migration
     {
         Schema::create('chamados', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('solicitante_id')->constrained('users')->nullable(false);
-            $table->foreignId('categoria_id')->constrained('categorias')->nullable(false);
-            $table->foreignId('setor_id')->constrained('setores')->nullable(false);
-            $table->foreignId('localizacao_id')->constrained('localizacoes')->nullable(false);
-            $table->string('status')->nullable(false);
+            $table->foreignId('solicitante_id')->references('id')->on('users')->constrained('users');
+            $table->foreignId('subcategoria_id')->references('id')->on('subcategorias')->constrained('subcategorias');
+            $table->string('solicitante');
+            $table->string('email');
+            $table->string('telefone')->nullable(true);
+            $table->string('solicitacao');
+            $table->string('status')->default(StatusTipo::ABERTO);
+            $table->foreignId('responsavel_id')->references('id')->on('users')->constrained('users')->nullable(true);
             $table->timestamps();
+            $table->dateTime('data_conclusao')->nullable();
         });
     }
 
