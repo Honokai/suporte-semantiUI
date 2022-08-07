@@ -64,7 +64,7 @@
                     <div class="default text">Categoria do problema</div>
                     <div class="menu">
                         @foreach($subcategorias as $subcategoria)
-                            <div class="item" data-value="{{$subcategoria->id}}"> {{$subcategoria->categoria->setor->nome}} - {{$subcategoria->categoria->nome}}</div>
+                            <div class="item" data-value="{{$subcategoria->id}}"> ({{$subcategoria->categoria->setor->nome}}) {{ $subcategoria->categoria->nome }} - {{ $subcategoria->nome }}</div>
                         @endforeach
                     </div>
                 </div>
