@@ -15,8 +15,13 @@ class Setores extends Model
         'cargo'
     ];
 
-    public function chamados()
+    public function categorias()
     {
-        return $this->hasManyThrough(Chamados::class, Categoria::class, 'setor_id', 'categoria_id', 'id');
+        return $this->hasMany(Categoria::class);
     }
+    
+    // public function chamados()
+    // {
+    //     return $this->hasManyThrough(Chamados::class, Categoria::class, 'setor_id', 'categoria_id', 'id');
+    // }
 }

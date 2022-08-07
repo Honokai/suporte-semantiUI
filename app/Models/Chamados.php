@@ -9,14 +9,16 @@ class Chamados extends Model
 {
     use HasFactory;
 
-    public function solicitante()
+    protected $guarded = [];
+
+    public function usuarioSolicitante()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'solicitante_id');
     }
 
-    public function categoria()
+    public function subcategoria()
     {
-        return $this->belongsTo(Categoria::class);
+        return $this->belongsTo(Subcategoria::class);
     }
 
     public function localizacao()
