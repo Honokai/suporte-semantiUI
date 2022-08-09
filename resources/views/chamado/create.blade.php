@@ -20,7 +20,7 @@
     <script>
         window.parent.location.href = "{{route('chamado.index', ['nomeSetor' => session('suporte')])}}"
     </script>
-@endisset
+@endif
 <form method="POST" action="{{route('chamados.store')}}" enctype="multipart/form-data">
     @csrf
     @if(!$errors->isEmpty())
