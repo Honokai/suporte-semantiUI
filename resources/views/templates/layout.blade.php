@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ $titulo ?? "Suporte"}}</title>
     <link rel="stylesheet" href="/css/semantic.css">
+    <link rel="stylesheet" href="/css/app.css">
     <script src="/js/jquery.min.js"></script>
     <script src="/js/semantic.min.js"></script>
     <script src="/js/semanticINIT.js"></script>

@@ -54,5 +54,7 @@
     }
 </style>
 <div class="ui longer modal" id="modal">
+    <iframe src="" id="modal" frameborder="0">
+    </iframe>
 </div>
 @endsection

@@ -3,7 +3,7 @@
 @foreach($columns as $column)
     @php
         $content = $row->{$column->field};
-        $content = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $content);
+        $content = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $content ?? '');
         $field   = $column->dataField != '' ? $column->dataField : $column->field;
     @endphp
     <td class="{{ $theme->table->tdBodyClass . ' '.$column->bodyClass ?? '' }}"

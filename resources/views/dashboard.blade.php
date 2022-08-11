@@ -51,7 +51,7 @@
                 <div class="row">
                     <div class="column align center" style="text-align: center; font-size: 25px">Chamados do seu setor</div>
                 </div>
-                <div class="row">
+                {{-- <div class="row">
                     <div class="four wide column">
                         <div class="ui red card">
                             <div class="content">
@@ -104,7 +104,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

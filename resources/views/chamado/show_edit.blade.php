@@ -22,13 +22,16 @@
 <style>
     .chamado-card {
         flex: 1;
-        background: rgb(61, 102, 105);
+        background: #6f7074;
         margin: 10px 0 10px 5px;
         border-radius: 4px;
         color: rgb(255, 255, 255);
-        padding: 0 0.8rem;
+        padding: 1rem 0.8rem;
     }
 
+    .actions {
+        padding: .5rem 0;
+    }
     .chamado-card > .header {
         flex: 1;
         font-size: 1.5rem;
@@ -63,15 +66,19 @@
         text-overflow: ellipsis;
     }
     .scrolling {
-        max-height: 30rem;
         overflow: hidden;
-        overflow-y: auto
+        overflow-y: auto;
     }
     
+    .print {
+        margin: 0.8rem 0;
+        font-size: 1.5rem;
+    }
+
     @media print {
         .scrolling {
-            max-height: 100%;
-            overflow-y: unset;
+            overflow: unset;
+            /* overflow-y: unset; */
             margin: 1rem 0;
         }
         .ui.form {
@@ -93,10 +100,10 @@
         <div class="header">
             Chamado #{{ $chamado->id }}
         </div>
+        <div class="print">
+            <button onclick="parent.printIframe()"><i class="print icon"></i></button>
+        </div>
         <div class="chamado-info">
-            <div class="campos-item">
-                <button onclick="parent.printIframe()"><i class="print icon"></i></button>
-            </div>
             <div class="campos-item">
                 <b>Status</b>
                 <div class="date">
@@ -152,12 +159,13 @@
             </div>
         </div>
     </div>
-    <div class="text-slate-800" style="display:flex; flex: 2; flex-direction: column; padding: 10px">
+    <div class="scrolling" style="display:flex; flex: 2; flex-direction: column; padding: 10px">
         <div style="flex: 3;">
-            <form method="POST" action="{{route('chamados.update', ['chamado' => $chamado->id])}}" id="form_chamado">
-                @csrf
-                @method('PUT')
+            <form method="POST" action="{{route('chamados.update', ['chamado' => $chamado->id])}}" id="form_chamado" enctype="multipart/form-data">
+                @if(Auth::user()->id == $chamado->solicitante_id || Auth::user()->setor_id == $chamado->subcategoria->categoria->setor->id)
                 <div class="ui form" style="flex: 1">
+                    @csrf
+                    @method('PUT')
                     <div class="field">
                         <label>Descreva o problema/situação:</label>
                         <textarea id="mensagem" name="mensagem" rows="3"></textarea>
@@ -167,19 +175,22 @@
                                 Anexar arquivo</label>
                             <input name="anexos[]" type="file" id="file" style="display:none">
                         </div>
-                        <div class="ui very relaxed horizontal list">
-                            @foreach ($chamado->anexos as $anexo)
-                                <div class="item">
-                                    <img class="ui avatar image" src="https://semantic-ui.com/images/avatar/small/daniel.jpg">
-                                    <div class="content">
-                                        <a class="header" href="{{asset('storage'.$anexo->anexo)}}" target="_blank">{{\File::extension($anexo->anexo)}}</a>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
                     </div>
                 </div>
-                <div class="scrolling image content">
+                @endif
+                <div class="image content">
+                    @if($chamado->anexos->count())
+                    <div class="ui very relaxed horizontal list">
+                        @foreach ($chamado->anexos as $anexo)
+                            <div class="item">
+                                <img class="ui avatar image" src="https://semantic-ui.com/images/avatar/small/daniel.jpg">
+                                <div class="content">
+                                    <a class="header" href="{{asset('storage'.$anexo->anexo)}}" target="_blank">{{\File::extension($anexo->anexo)}}</a>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    @endif
                     <div class="description">
                         <div class="ui comments" id="conversa">
                             <h3 class="ui dividing header">Conversa</h3>
@@ -231,19 +242,16 @@
                     </button> --}}
         
                 @elseif((Auth::user()->setor_id == $chamado->subcategoria->categoria->setor->id || Auth::user()->id == $chamado->solicitante_id) && $chamado->status == 'encerrado')
-        
-                    <form method="POST" action="{{ route('chamados.update', ['chamado' => $chamado->id]) }}" hidden>
-                        @csrf
-                        @method('put')
-                        <input name="status" type="text" value="reaberto">
-                    </form>
-                    <button class="ui negative right labeled icon button"
-                    onclick="this.previousElementSibling.submit()">
-                        Reabrir chamado
-                        <i class="checkmark icon"></i>
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="status" value="encerrado" id="status">
+                        <label for="status">Reabrir</label>
+                    </div>
+                    <button class="ui positive right labeled icon button">
+                        Enviar mensagem
+                        <i class="paper plane icon"></i>
                     </button>
                 @endif
-                @if ((Auth::user()->id == $chamado->solicitante_id || Auth::user()->setor_id == $chamado->categoria->setor->id) && $chamado->status != 'encerrado')
+                @if ((Auth::user()->id == $chamado->solicitante_id || Auth::user()->setor_id == $chamado->subcategoria->categoria->setor->id) && $chamado->status != 'encerrado')
                 <button class="ui positive right labeled icon button">
                     Enviar mensagem
                     <i class="paper plane icon"></i>
