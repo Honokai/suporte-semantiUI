@@ -47,7 +47,7 @@
                                 <span class="text">Categoria</span>
                                 <div class="menu">
                                     <a href="{{route('categorias.create')}}" class="item">Nova</a>
-                                    <a href="#" class="item">Gerenciar</a>
+                                    <a href="{{route('categorias.index')}}" class="item">Gerenciar</a>
                                 </div>
                             </div>
                             <div class="item">
