@@ -49,17 +49,8 @@ class ChamadosController extends Controller
                 $chamado = new Chamados($request->except(['_token', 'ramal', 'anexos']));
                 $chamado->solicitante = Auth::user()->name;
                 $chamado->save();
-                if($request->hasFile('anexos')) {
-                    $anexo = new Anexos;
-                    foreach($request->file('anexos') as $arquivo) {
-                        # armazena o arquivo em si e salva o caminho para armazenamento no banco
-                        $caminho = $arquivo->store("\\anexos\\{$chamado->id}", ['disk' => 'public']);
-                        if($caminho) {
-                            $anexo->anexo = str_replace('/','\\',$caminho);
-                            $chamado->anexos()->save($anexo);
-                        }
-                    }
-                }
+                
+                $chamado->hasAnexo($request);
             });
 
             return back()->with('suporte', Subcategoria::find($request->subcategoria_id)->categoria->setor->nome);
@@ -92,17 +83,7 @@ class ChamadosController extends Controller
                     $chamado->status = StatusTipo::coerce($request->status);
                 }
 
-                if($request->hasFile('anexos')) {
-                    $anexo = new Anexos;
-                    foreach($request->file('anexos') as $arquivo) {
-                        # armazena o arquivo em si e salva o caminho para armazenamento no banco
-                        $caminho = $arquivo->store("\\anexos\\{$chamado->id}", ['disk' => 'public']);
-                        if($caminho) {
-                            $anexo->anexo = str_replace('/','\\',$caminho);
-                            $chamado->anexos()->save($anexo);
-                        }
-                    }
-                }
+                $chamado->hasAnexo($request);
 
                 $chamado->mensagens()->create([
                     'mensagem' => $request->mensagem,
