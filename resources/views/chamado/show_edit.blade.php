@@ -185,7 +185,7 @@
                             <div class="item">
                                 <img class="ui avatar image" src="https://semantic-ui.com/images/avatar/small/daniel.jpg">
                                 <div class="content">
-                                    <a class="header" href="{{asset('storage'.$anexo->anexo)}}" target="_blank">{{\File::extension($anexo->anexo)}}</a>
+                                    <a class="header" href="{{asset('storage'.$anexo->caminho)}}" target="_blank">{{$anexo->nome}}</a>
                                 </div>
                             </div>
                         @endforeach
