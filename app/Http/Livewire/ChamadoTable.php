@@ -64,8 +64,10 @@ final class ChamadoTable extends PowerGridComponent
     {
         return PowerGrid::eloquent()
             ->addColumn('status', fn (Chamados $model) => Str::title($model->status))
-            ->addColumn('data_conclusao', fn (Chamados $model) => $model->data_conclusao ? Carbon::parse($model->data_conclusao)->format('d/m/Y H:i:s') : "")
-            ->addColumn('aberto_em', fn (Chamados $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'));
+            ->addColumn('conclusao', fn (Chamados $model) => $model->conclusao ? Carbon::parse($model->data_conclusao)->format('d/m/Y H:i:s') : "")
+            ->addColumn('aberto_em', function (Chamados $model) {
+                return Carbon::parse($model->aberto_em)->format('d/m/Y H:i:s');
+            });
     }
 
     public function columns(): array
@@ -90,7 +92,7 @@ final class ChamadoTable extends PowerGridComponent
 
             Column::make('Aberto', 'aberto_em'),
 
-            Column::make('Conclusão', 'data_conclusao'),
+            Column::make('Conclusão', 'conclusao'),
 
             Column::make('Responsavel', 'responsavel')
         ];
