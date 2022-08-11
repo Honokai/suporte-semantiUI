@@ -24,11 +24,6 @@ class ChamadosController extends Controller
     public function index(string $setor): View
     {
         return view('chamado.index', ['setor' => $setor]);
-        // return view("chamados")
-        //     ->with(
-        //         "chamados",
-        //         Setores::where("nome", $setor)->get()?->first()?->chamados()->get()
-        //     );
     }
 
     public function show(Chamados $chamado)
