@@ -51,8 +51,9 @@ class ChamadosController extends Controller
     {
         try {
             DB::transaction(function () use ($request) {
-                $request['solicitante'] = Auth::user()->name;
-                $chamado = Chamados::create($request->except(['_token', 'ramal']));
+                $chamado = new Chamados($request->except(['_token', 'ramal', 'anexos']));
+                $chamado->solicitante = Auth::user()->name;
+                $chamado->save();
                 if($request->hasFile('anexos')) {
                     $anexo = new Anexos;
                     foreach($request->file('anexos') as $arquivo) {
@@ -60,7 +61,7 @@ class ChamadosController extends Controller
                         $caminho = $arquivo->store("\\anexos\\{$chamado->id}", ['disk' => 'public']);
                         if($caminho) {
                             $anexo->anexo = str_replace('/','\\',$caminho);
-                            $chamado->anexos()->associate($anexo);
+                            $chamado->anexos()->save($anexo);
                         }
                     }
                 }
