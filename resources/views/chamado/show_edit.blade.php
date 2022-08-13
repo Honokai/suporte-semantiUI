@@ -1,24 +1,5 @@
 @extends('templates.layout')
 @section('conteudo')
-@php
-    switch ($chamado->status) {
-        case 'aberto':
-            $cor="rgb(237, 89, 78)";
-            break;
-        case 'em andamento':
-            $cor="rgb(242, 236, 68)";
-            break;
-        case 'finalizado':
-            $cor="rgb(78, 118, 150)";
-            break;
-        case 'concluído':
-            $cor="rgb(78, 118, 150)";
-            break;
-        case 'reaberto':
-            $cor="rgb(78, 118, 150)";
-            break;
-    }
-@endphp
 <style>
     .chamado-card {
         flex: 1;
@@ -107,7 +88,7 @@
             <div class="campos-item">
                 <b>Status</b>
                 <div class="date">
-                    {{Illuminate\Support\Str::title($chamado->status)}}
+                    {{Illuminate\Support\Str::title(App\Enums\StatusTipo::getKey($chamado->status))}}
                 </div>
             </div>
             <div class="campos-item">
@@ -185,7 +166,7 @@
                             <div class="item">
                                 <img class="ui avatar image" src="https://semantic-ui.com/images/avatar/small/daniel.jpg">
                                 <div class="content">
-                                    <a class="header" href="{{asset('storage'.$anexo->caminho)}}" target="_blank">{{$anexo->nome}}</a>
+                                    <a class="header" href="{{asset('storage/'.$anexo->caminho)}}" target="_blank">{{$anexo->nome}}</a>
                                 </div>
                             </div>
                         @endforeach
@@ -225,25 +206,15 @@
                 </div>
             </div>
             <div class="actions">
-                @if (Auth::user()->setor_id == $chamado->subcategoria->categoria->setor->id && $chamado->status != 'encerrado')
+                @if (Auth::user()->setor_id == $chamado->subcategoria->categoria->setor->id && $chamado->status != 3)
                     <div class="ui checkbox">
                         <input type="checkbox" name="status" value="encerrado" id="status">
                         <label for="status">Encerrar</label>
                     </div>
-                    {{-- <form method="POST" action="{{ route('chamados.update', ['chamado' => $chamado->id]) }}" hidden>
-                        @csrf
-                        @method('put')
-                        <input name="status" type="text" value="encerrado">
-                    </form> --}}
-                    {{-- <button class="ui negative right labeled icon button"
-                    onclick="this.previousElementSibling.submit()">
-                        Encerrar chamado
-                        <i class="checkmark icon"></i>
-                    </button> --}}
         
-                @elseif((Auth::user()->setor_id == $chamado->subcategoria->categoria->setor->id || Auth::user()->id == $chamado->solicitante_id) && $chamado->status == 'encerrado')
+                @elseif((Auth::user()->setor_id == $chamado->subcategoria->categoria->setor->id || Auth::user()->id == $chamado->solicitante_id) && $chamado->status == 3)
                     <div class="ui checkbox">
-                        <input type="checkbox" name="status" value="encerrado" id="status">
+                        <input type="checkbox" name="status" value="reaberto" id="status">
                         <label for="status">Reabrir</label>
                     </div>
                     <button class="ui positive right labeled icon button">
@@ -251,7 +222,7 @@
                         <i class="paper plane icon"></i>
                     </button>
                 @endif
-                @if ((Auth::user()->id == $chamado->solicitante_id || Auth::user()->setor_id == $chamado->subcategoria->categoria->setor->id) && $chamado->status != 'encerrado')
+                @if ((Auth::user()->id == $chamado->solicitante_id || Auth::user()->setor_id == $chamado->subcategoria->categoria->setor->id) && $chamado->status != 3)
                 <button class="ui positive right labeled icon button">
                     Enviar mensagem
                     <i class="paper plane icon"></i>
