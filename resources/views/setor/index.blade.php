@@ -24,7 +24,7 @@
                         @csrf
                         @method('put')
                         <button class="ui inverted icon green button" type="submit"
-                            data-tooltip="Reativar categoria." data-position="top center"
+                            data-tooltip="Reativar setor." data-position="top center"
                             data-variation="basic"
                         >
                             <i class="icon redo"></i>
@@ -35,7 +35,7 @@
                         @csrf
                         @method('delete')
                         <button class="ui inverted icon red button" type="submit" 
-                            data-tooltip="Desativar categoria." data-position="top center"
+                            data-tooltip="Desativar setor." data-position="top center"
                             data-variation="basic"
                         >
                             <i class="icon trash"></i>

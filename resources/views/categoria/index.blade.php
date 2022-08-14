@@ -8,7 +8,7 @@
 <div class="ui container">
     @include('templates.feedback')
     <div class="ui container">
-        <button class="ui right floated green button" style="margin: 0.2rem 0" onclick="abrirModal('{{route('categorias.create')}}')"><i class="icon plus"></i>Categoria</button>
+        <button class="ui right floated primary button" style="margin: 0.2rem 0" onclick="abrirModal('{{route('categorias.create')}}')"><i class="icon plus"></i>Categoria</button>
     </div>
     @foreach ($categorias as $categoria)
         @php
@@ -42,7 +42,7 @@
                         </button>
                     </form>
                 @endif
-                <button onclick="abrirModal('{{route('subcategorias.create', ['categoria' => $categoria->id])}}')" class="ui green button"><i class="icon plus"></i> Subcategoria</button>
+                <button onclick="abrirModal('{{route('subcategorias.create', ['categoria' => $categoria->id])}}')" class="ui primary button"><i class="icon plus"></i> Subcategoria</button>
             </div>
         </div>
         @foreach ($categoria->subcategorias as $subcategoria)
@@ -53,7 +53,7 @@
                     <form style="display: inline" action="{{route('subcategorias.restore',['subcategoria'=>$subcategoria->id])}}" method="POST">
                         @csrf
                         @method('put')
-                        <button class="ui inverted icon green button" type="submit" 
+                        <button class="ui inverted icon green button" type="submit"
                             data-tooltip="Reativar subcategoria." data-position="top center"
                             data-variation="basic"
                         >
@@ -69,7 +69,7 @@
                         ><i class="icon trash"></i></button>
                     </form>
                 @endif
-            <button class="ui inverted green button">Editar</button></div>
+            <button class="ui inverted primary button">Editar</button></div>
         </div>      
         @endforeach
     @endforeach

@@ -19,6 +19,7 @@ class CreateCategoriasTable extends Migration
             $table->string('nome');
             $table->foreignId('setor_id')->references('id')->on('setores')->constrained('setores');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

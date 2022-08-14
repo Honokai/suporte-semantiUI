@@ -16,6 +16,7 @@
     border-radius: 0.2rem;
     color: rgb(66, 73, 79) !important;
     border-bottom: rgb(226, 107, 107) 2px solid;
+    font-weight: 800;
 }
 
 .object-header+.object-header {

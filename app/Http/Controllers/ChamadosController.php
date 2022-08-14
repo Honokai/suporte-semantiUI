@@ -66,7 +66,7 @@ class ChamadosController extends Controller
 
                 $chamado->hasAnexo($request);
             });
-
+            $table->softDeletes();
             return back()->with('suporte', Subcategoria::find($request->subcategoria_id)->categoria->setor->nome);
         } catch (\Throwable $th) {
             info($th);
