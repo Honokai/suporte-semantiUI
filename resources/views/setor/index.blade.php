@@ -1,25 +1,49 @@
 @extends('templates.layout', ['navbar' => true, 'titulo' => 'Setores'])
+
+@section('head')
+<link rel="stylesheet" href="/css/custom.css">
+@endsection
+
 @section('conteudo')
 <div class="ui container">
-    @if(session('mensagem'))
-    <h1>
-    {{session('mensagem')}}
-    </h1>
-    @endif
+    @include('templates.feedback')
     <div style="text-align: right; padding: 0.2rem 0">
-        <button class="ui primary button"><i class="plus icon"></i> Criar setor</button>
+        <button class="ui primary button" onclick="abrirModal('{{route('setores.create')}}')"><i class="plus icon"></i>Setor</button>
     </div>
     @foreach ($setores as $setor)
-    <div style="display: flex; width: 100%; background: rgb(121, 156, 144); padding: .6rem">
-        <div style="flex:1">{{$setor->nome}}</div>
-        <div style="display:flex; flex:1; justify-content:end">
-        <form style="display: inline" action="{{route('setores.destroy',['setore' => $setor->id])}}" method="POST">
-            @csrf
-            @method("delete")
-            <button class="ui red button" type="submit">Apagar</a>
-        </form>
-        <button class="ui primary button">Editar</button></div>
-    </div>
+        @php
+            $disabled = $setor->deleted_at ? " disabled" : "";
+        @endphp
+        <div class="object-header{{$disabled}}">
+            <div style="display:flex; flex:1">
+                {{ $setor->nome }}
+            </div>
+            <div style="display:flex; flex:1; justify-content:end">
+                @if($disabled)
+                    <form style="display: inline" action="{{route('setores.restore', ['setor'=>$setor->id])}}" method="POST">
+                        @csrf
+                        @method('put')
+                        <button class="ui inverted icon green button" type="submit"
+                            data-tooltip="Reativar categoria." data-position="top center"
+                            data-variation="basic"
+                        >
+                            <i class="icon redo"></i>
+                        </button>
+                    </form>
+                @else
+                    <form style="display: inline" action="{{route('setores.destroy',['setore'=>$setor->id])}}" method="POST">
+                        @csrf
+                        @method('delete')
+                        <button class="ui inverted icon red button" type="submit" 
+                            data-tooltip="Desativar categoria." data-position="top center"
+                            data-variation="basic"
+                        >
+                            <i class="icon trash"></i>
+                        </button>
+                    </form>
+                @endif
+            </div>
+        </div>
     @endforeach
 </div>
 @endsection

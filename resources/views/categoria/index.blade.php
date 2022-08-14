@@ -6,17 +6,7 @@
 
 @section('conteudo')
 <div class="ui container">
-    @if(session('mensagem.positiva'))
-    <div class="ui positive message">
-        <i class="close icon"></i>
-        <p>{{session('mensagem.positiva')}}</p>
-    </div>
-    @elseif(session('mensagem.negativa'))
-    <div class="ui negative message">
-        <i class="close icon"></i>
-        <p>{{session('mensagem.negativa')}}</p>
-    </div>
-    @endif
+    @include('templates.feedback')
     <div class="ui container">
         <button class="ui right floated green button" style="margin: 0.2rem 0"><i class="icon plus"></i>Categoria</button>
     </div>
@@ -24,7 +14,7 @@
         @php
             $disabled = $categoria->deleted_at ? " disabled" : "";
         @endphp
-        <div class="categoria{{$disabled}}">
+        <div class="object-header{{$disabled}}">
             <div style="display:flex; flex:1">
                 {{ $categoria->nome }}
             </div>
@@ -52,7 +42,7 @@
                         </button>
                     </form>
                 @endif
-                <button class="ui inverted green button"><i class="icon plus"></i> Subcategoria</button>
+                <button class="ui green button"><i class="icon plus"></i> Subcategoria</button>
             </div>
         </div>
         @foreach ($categoria->subcategorias as $subcategoria)
@@ -84,10 +74,4 @@
         @endforeach
     @endforeach
 </div>
-<script>
-    $('.message .close').on('click', function() {
-        $(this).closest('.message')
-        .transition('fade');
-    });
-</script>
 @endsection

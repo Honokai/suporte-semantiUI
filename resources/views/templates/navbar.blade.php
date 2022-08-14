@@ -8,7 +8,7 @@
     <div class="ui dropdown icon item">
         <i class="wrench icon"></i>
         <div class="menu">
-            <div class="item" onclick="abrirModal(0)">
+            <div class="item" onclick="abrirModal()">
                 Novo chamado
             </div>
             <div class="divider"></div>
@@ -61,6 +61,4 @@
     </div>
     </div>
 </div>
-<div class="ui bottom attached segment">
-    <p></p>
-</div>
+<br/>

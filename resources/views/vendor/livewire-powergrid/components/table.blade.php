@@ -85,7 +85,7 @@
                 >
                 @else
                     <tr style="{{ $theme->table->trBodyStyle }}"
-                        onclick="abrirModal({{$row->id}})"
+                        onclick="abrirModal('{{route('chamado.show', ['chamado' => $row->id])}}')"
                         class="{{ $class }}"
                         wire:key="{{ md5($row->{$primaryKey} ?? $loop->index) }}">
                         @endif
