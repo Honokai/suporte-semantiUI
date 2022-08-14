@@ -34,7 +34,6 @@ class ChamadosController extends Controller
 
     public function create()
     {
-
         return view('chamado.create')->with(
             [
                 "setores" => Setores::all(),
@@ -50,7 +49,9 @@ class ChamadosController extends Controller
                     'categorias.nome as categoria_nome',
                     'subcategorias.nome as subcategoria_nome',
                     'subcategorias.deleted_at'
-                )->orderBy('setores.nome')->get()
+                )->where('subcategorias.deleted_at', null)
+                ->where('setores.deleted_at', null)
+                ->where('categorias.deleted_at', null)->orderBy('setores.nome')->get()
             ]
         );
     }

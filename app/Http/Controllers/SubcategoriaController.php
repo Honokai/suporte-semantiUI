@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Subcategoria;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class SubcategoriaController extends Controller
@@ -13,14 +14,37 @@ class SubcategoriaController extends Controller
         return view('categoria.index')->with('subcategorias', Subcategoria::all());
     }
 
-    public function destroy($id)
+    public function destroy(Subcategoria $subcategoria)
     {
-        $this->authorize('delete', Subcategoria::find($id));
-        $categoria = Subcategoria::find($id);
-        if($categoria->delete()){
-            return back()->with('mensagem', "Categoria excluída");
-        } else {
-            return back()->with('mensagem', "Parece que ocorreu um erro.");
+        try {
+            DB::transaction(function () use ($subcategoria) {
+                // $this->authorize('delete', Subcategoria::find($subcategoria));
+                $subcategoria->delete();
+            });
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            info($th);
+
+            return back()->with('mensagem.negativa', "Parece que ocorreu um erro.");
         }
+
+        return back()->with('mensagem.negativa', "Subcategoria desativada.");
+    }
+
+    public function restore($subcategoria)
+    {
+        try {
+            $subcategoria = Subcategoria::withTrashed()->findOrFail($subcategoria);
+            DB::transaction(function () use ($subcategoria){
+                $subcategoria->restore();
+            });
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            info($th);
+            
+            return back()->with(["mensagem.negativa" => "Ocorreu um erro ao tentar processar sua requisição."]);
+        }
+        
+        return back()->with('mensagem.positiva', 'Subcategoria reativada.');
     }
 }
