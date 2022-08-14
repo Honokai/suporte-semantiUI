@@ -20,6 +20,22 @@ class CategoriaController extends Controller
         }])->withTrashed()->where('setor_id', auth()->user()->setor_id)->get());
     }
 
+    public function store(Request $request)
+    {
+        try {
+            DB::transaction(function () use ($request) {
+                Categoria::create($request->except('_token'));
+            });
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            info($th);
+
+            return back()->with('mensagem.negativa', 'Ocorreu um erro ao tentar processar sua requisição');
+        }
+
+        return back()->with('refresh', true);
+    }
+
     public function destroy($id)
     {
         $this->authorize('delete', Categoria::find($id));

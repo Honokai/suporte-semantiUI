@@ -12,6 +12,8 @@ class Subcategoria extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $guarded = [];
+
     public function categoria(): BelongsTo
     {
         return $this->belongsTo(Categoria::class);

@@ -14,6 +14,27 @@ class SubcategoriaController extends Controller
         return view('categoria.index')->with('subcategorias', Subcategoria::all());
     }
 
+    public function create(\App\Models\Categoria $categoria)
+    {
+        return view('subcategoria.create')->with('categoria', $categoria->id);
+    }
+
+    public function store(Request $request)
+    {
+        try {
+            DB::transaction(function () use ($request) {
+                Subcategoria::create($request->except('_token'));
+            });
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            info($th);
+
+            return back()->with('mensagem.negativa', 'Ocorreu um erro ao tentar processar sua requisição');
+        }
+
+        return back()->with('refresh', true);
+    }
+
     public function destroy(Subcategoria $subcategoria)
     {
         try {

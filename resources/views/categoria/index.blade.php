@@ -8,7 +8,7 @@
 <div class="ui container">
     @include('templates.feedback')
     <div class="ui container">
-        <button class="ui right floated green button" style="margin: 0.2rem 0"><i class="icon plus"></i>Categoria</button>
+        <button class="ui right floated green button" style="margin: 0.2rem 0" onclick="abrirModal('{{route('categorias.create')}}')"><i class="icon plus"></i>Categoria</button>
     </div>
     @foreach ($categorias as $categoria)
         @php
@@ -42,7 +42,7 @@
                         </button>
                     </form>
                 @endif
-                <button class="ui green button"><i class="icon plus"></i> Subcategoria</button>
+                <button onclick="abrirModal('{{route('subcategorias.create', ['categoria' => $categoria->id])}}')" class="ui green button"><i class="icon plus"></i> Subcategoria</button>
             </div>
         </div>
         @foreach ($categoria->subcategorias as $subcategoria)

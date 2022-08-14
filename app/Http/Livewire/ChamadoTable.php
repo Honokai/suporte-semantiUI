@@ -90,7 +90,7 @@ final class ChamadoTable extends PowerGridComponent
     {
         return [
             Column::make('ID', 'id')
-                ->searchable(),
+                ->sortable(),
             
             Column::make('Estado', 'status')
                 ->searchable()
@@ -98,6 +98,7 @@ final class ChamadoTable extends PowerGridComponent
 
             Column::make('Categoria', 'categoria')
                 ->searchable()
+                ->makeInputText('categoria')
                 ->sortable(),
 
             Column::make('Solicitante', 'solicitante')
@@ -105,7 +106,9 @@ final class ChamadoTable extends PowerGridComponent
                 ->makeInputText('solicitante')
                 ->sortable(),
 
-            Column::make('Aberto', 'aberto_em'),
+            Column::make('Aberto', 'aberto_em')
+                ->searchable()
+                ->makeInputDatePicker(),
 
             Column::make('Conclusão', 'conclusao'),
 

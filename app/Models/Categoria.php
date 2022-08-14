@@ -14,6 +14,8 @@ class Categoria extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $guarded = [];
+
     public function setor()
     {
         return $this->belongsTo(Setores::class);
