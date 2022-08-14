@@ -1,22 +1,25 @@
 @extends('templates.layout', ['navbar' => true, 'titulo' => 'Setores'])
 @section('conteudo')
 <div class="ui container">
-@if(session('mensagem'))
-<h1>
-{{session('mensagem')}}
-</h1>
-@endif
+    @if(session('mensagem'))
+    <h1>
+    {{session('mensagem')}}
+    </h1>
+    @endif
+    <div style="text-align: right; padding: 0.2rem 0">
+        <button class="ui primary button"><i class="plus icon"></i> Criar setor</button>
+    </div>
     @foreach ($setores as $setor)
-        <div style="display: flex; width: 100%; background: rgb(121, 156, 144); padding: .6rem">
-            <div style="flex:1">{{$setor->nome}}</div>
-            <div style="display:flex; flex:1; justify-content:end">
-            <form style="display: inline" action="{{route('setores.destroy',['setore' => $setor->id])}}" method="POST">
-                @csrf
-                @method("DELETE")
-                <button class="ui red button" type="submit">Apagar</a>
-            </form>
-            <button class="ui primary button">Editar</button></div>
-        </div>
+    <div style="display: flex; width: 100%; background: rgb(121, 156, 144); padding: .6rem">
+        <div style="flex:1">{{$setor->nome}}</div>
+        <div style="display:flex; flex:1; justify-content:end">
+        <form style="display: inline" action="{{route('setores.destroy',['setore' => $setor->id])}}" method="POST">
+            @csrf
+            @method("delete")
+            <button class="ui red button" type="submit">Apagar</a>
+        </form>
+        <button class="ui primary button">Editar</button></div>
+    </div>
     @endforeach
 </div>
 @endsection

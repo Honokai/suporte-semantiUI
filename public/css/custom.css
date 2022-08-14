@@ -7,3 +7,16 @@
     filter: brightness(0.9);
     cursor: pointer;
 }
+
+.categoria {
+    display: flex;
+    width: 100%;
+    padding: 0.6rem;
+    background: peachpuff;
+    border-radius: 0.2rem;
+    color: rgb(66, 73, 79);
+}
+
+.disabled > *:first-child {
+    text-decoration: line-through;
+}

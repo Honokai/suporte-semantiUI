@@ -10,12 +10,16 @@
     <script src="/js/jquery.min.js"></script>
     <script src="/js/semantic.min.js"></script>
     <script src="/js/semanticINIT.js"></script>
-
+    @yield('head')
 </head>
 <body>
     @isset($navbar)
         @include('templates.navbar')
     @endisset
     @yield('conteudo')
+    <div class="ui longer modal" id="modal">
+        <iframe src="" id="iframe" style="height: 70vh; width: 100%" frameborder="0">
+        </iframe>
+    </div>
 </body>
 </html>

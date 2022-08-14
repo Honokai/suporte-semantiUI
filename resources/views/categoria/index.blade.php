@@ -1,71 +1,93 @@
 @extends('templates.layout', ['titulo' => "Listar categorias", 'navbar' => true])
-@section('conteudo')
 
-@if(session('mensagem'))
-<h1>
-{{session('mensagem')}}
-</h1>
-@endif
+@section('head')
+<link rel="stylesheet" href="/css/custom.css">
+@endsection
+
+@section('conteudo')
 <div class="ui container">
-@foreach ($categorias as $categoria)
-    <div style="display: flex; width: 100%; background: rgb(121, 156, 144); padding: .6rem">
-        <div style="flex:1">{{$categoria->nome}}</div>
-        <div style="display:flex; flex:1; justify-content:end">
-            <form style="display: inline" action="{{route('categorias.destroy',['categoria'=>$categoria->id])}}" method="POST">
-                @csrf
-                @method('delete')
-                <button class="ui red button" type="submit">Apagar</a>
-            </form>
-        <button class="ui primary button">Editar</button></div>
+    @if(session('mensagem.positiva'))
+    <div class="ui positive message">
+        <i class="close icon"></i>
+        <p>{{session('mensagem.positiva')}}</p>
     </div>
-    @foreach ($categoria->subcategorias as $subcategoria)
-    <div style="display: flex; width: 100%; padding: .6rem">
-        <div style="flex:1">{{$subcategoria->nome}}</div>
-        <div style="display:flex; flex:1; justify-content:end">
-            <form style="display: inline" action="{{route('categorias.destroy',['categoria'=>$subcategoria->id])}}" method="POST">
-                @csrf
-                @method('delete')
-                <button class="ui red button" type="submit">Apagar</a>
-            </form>
-        <button class="ui primary button">Editar</button></div>
-    </div>      
-    @endforeach
-@endforeach
-</div>
-{{-- <table class="ui fixed table">
-    <thead>
-        <tr>
-            <th>Categoria</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
+    @elseif(session('mensagem.negativa'))
+    <div class="ui negative message">
+        <i class="close icon"></i>
+        <p>{{session('mensagem.negativa')}}</p>
+    </div>
+    @endif
+    <div class="ui container">
+        <button class="ui right floated green button" style="margin: 0.2rem 0"><i class="icon plus"></i>Categoria</button>
+    </div>
     @foreach ($categorias as $categoria)
-          <tr class="">
-            <td>{{$categoria->nome}}</td>
-            <td>
-                <form style="display: inline" action="{{route('categorias.destroy',['categoria'=>$categoria->id])}}" method="POST">
-                    @csrf
-                    @method('delete')
-                    <button class="ui red button" type="submit">Apagar</a>
-                </form>
-                <button class="ui primary button">Editar</button>
-            </td>
-          </tr>
-          @foreach ($categoria->subcategorias as $subcategoria)
-          <tr>
-            <td>{{$subcategoria->nome}}</td>
-            <td>
-                <form style="display: inline" action="{{route('categorias.destroy',['categoria'=>$subcategoria->id])}}" method="POST">
-                    @csrf
-                    @method('delete')
-                    <button class="ui red button" type="submit">Apagar</a>
-                </form>
-                <button class="ui primary button">Editar</button>
-            </td>
-          </tr>
-          @endforeach
+        @php
+            $disabled = $categoria->deleted_at ? " disabled" : "";
+        @endphp
+        <div class="categoria{{$disabled}}">
+            <div style="display:flex; flex:1">
+                {{ $categoria->nome }}
+            </div>
+            <div style="display:flex; flex:1; justify-content:end">
+                @if($disabled)
+                    <form style="display: inline" action="{{route('categorias.restore', ['categoria'=>$categoria->id])}}" method="POST">
+                        @csrf
+                        @method('put')
+                        <button class="ui inverted icon green button" type="submit"
+                            data-tooltip="Reativar categoria." data-position="top center"
+                            data-variation="basic"
+                        >
+                            <i class="icon redo"></i>
+                        </button>
+                    </form>
+                @else
+                    <form style="display: inline" action="{{route('categorias.destroy',['categoria'=>$categoria->id])}}" method="POST">
+                        @csrf
+                        @method('delete')
+                        <button class="ui inverted icon red button" type="submit" 
+                            data-tooltip="Desativar categoria." data-position="top center"
+                            data-variation="basic"
+                        >
+                            <i class="icon trash"></i>
+                        </button>
+                    </form>
+                @endif
+                <button class="ui inverted green button"><i class="icon plus"></i> Subcategoria</button>
+            </div>
+        </div>
+        @foreach ($categoria->subcategorias as $subcategoria)
+        <div @if($subcategoria->deleted_at) class="disabled" @endif style="display: flex; width: 100%; padding: .6rem">
+            <div style="flex:1">{{$subcategoria->nome}}</div>
+            <div style="display:flex; flex:1; justify-content:end">
+                @if($subcategoria->deleted_at)
+                    <form style="display: inline" action="{{route('subcategorias.restore',['subcategoria'=>$subcategoria->id])}}" method="POST">
+                        @csrf
+                        @method('put')
+                        <button class="ui inverted icon green button" type="submit" 
+                            data-tooltip="Reativar subcategoria." data-position="top center"
+                            data-variation="basic"
+                        >
+                        <i class="icon redo"></i></button>
+                    </form>
+                @else
+                    <form style="display: inline" action="{{route('subcategorias.destroy',['subcategoria'=>$subcategoria->id])}}" method="POST">
+                        @csrf
+                        @method('delete')
+                        <button class="ui inverted icon red button" type="submit"
+                        data-tooltip="Desativar subcategoria." data-position="top center"
+                        data-variation="basic"
+                        ><i class="icon trash"></i></button>
+                    </form>
+                @endif
+            <button class="ui inverted green button">Editar</button></div>
+        </div>      
+        @endforeach
     @endforeach
-    </tbody>
-</table> --}}
+</div>
+<script>
+    $('.message .close').on('click', function() {
+        $(this).closest('.message')
+        .transition('fade');
+    });
+</script>
 @endsection
