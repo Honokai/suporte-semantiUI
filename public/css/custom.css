@@ -17,6 +17,7 @@
     color: rgb(66, 73, 79) !important;
     border-bottom: rgb(226, 107, 107) 2px solid;
     font-weight: 800;
+    font-size: 1.2rem;
 }
 
 .object-header+.object-header {

@@ -34,7 +34,7 @@
                     <form style="display: inline" action="{{route('categorias.destroy',['categoria'=>$categoria->id])}}" method="POST">
                         @csrf
                         @method('delete')
-                        <button class="ui inverted icon red button" type="submit" 
+                        <button class="ui icon red button" type="submit" 
                             data-tooltip="Desativar categoria." data-position="top center"
                             data-variation="basic"
                         >

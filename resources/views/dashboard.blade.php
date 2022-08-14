@@ -25,7 +25,7 @@
                                     {{$chamados->groupBy('status')->has(['2'])?$chamados->groupBy('status')['2']->count(): '0'}}
                                 </div>
                             </div>
-                        </div>                        
+                        </div>
                     </div>
                     <div class="four wide column">
                         <div class="ui green card">

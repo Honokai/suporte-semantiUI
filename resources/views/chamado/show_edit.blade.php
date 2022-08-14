@@ -51,9 +51,8 @@
         overflow-y: auto;
     }
     
-    .print {
-        margin: 0.8rem 0;
-        font-size: 1.5rem;
+    .print:hover {
+        filter: brightness(0.9);
     }
 
     @media print {
@@ -74,6 +73,44 @@
     .d-none {
         display: none !important;
     }
+
+    .px-1 {
+        padding: 0 1rem !important;
+    }
+
+   .py-1 {
+        padding: 1rem 0 !important;
+    }
+
+    .m-1 {
+        margin: 1rem !important;
+    }
+
+    .p-1 {
+        padding: 0 .5rem;
+    }
+
+    .medium {
+        font-size: 1.15rem;
+    }
+
+    .large {
+        font-size: 1.3rem;
+    }
+
+    .ui.card {
+        background: #8fb6ff;
+        border: #528fff 1px solid;
+    }
+
+    .ui.card > .content > .header {
+        color: rgb(255, 255, 255) !important;
+        border-bottom: 0.2rem solid rgb(82, 120, 191);
+    }
+
+    .ui.card > .content > .description {
+        color: rgb(255, 255, 255) !important;
+    }
 </style>
 @if(session('suporte'))
     <script>
@@ -81,66 +118,55 @@
     </script>
 @endif
 <div class="ui fluid container" style="margin: 0 !important; height: 100%; display:flex">
-    <div class="chamado-card">
-        <div class="header">
-            Chamado #{{ $chamado->id }}
-        </div>
-        <div class="print">
-            <button onclick="parent.printIframe()"><i class="print icon"></i></button>
-        </div>
-        <div class="chamado-info">
-            <div class="campos-item">
-                <b>Status</b>
-                <div class="date">
-                    {{Illuminate\Support\Str::title(App\Enums\StatusTipo::getKey($chamado->status))}}
-                </div>
+    <div class="ui card m-1">
+        <div class="content">
+            <div class="header p-1">
+                Chamado #{{ $chamado->id }} - {{Illuminate\Support\Str::title(App\Enums\StatusTipo::getKey(intval($chamado->status)))}}
             </div>
-            <div class="campos-item">
-                <b>Data abertura</b>
+            <div class="description large py-1">
+                <button class="print" onclick="parent.printIframe()"><i class="print icon"></i></button>
+            </div>
+            <div class="description medium">
+                <b>Data abertura:</b>
                 <div class="date">
                     {{ Carbon\Carbon::parse($chamado->created_at)->format('d/m/Y H:i')}}
                 </div>
             </div>
-            <div class="campos-item">
-                <b>Solicitante</b>
+            <div class="description medium">
+                <b>Solicitante:</b>
                 <div>
                     {{ $chamado->solicitante}}
                 </div>
             </div>
-            <div class="campos-item">
+            <div class="description medium">
                 <b>Categoria:</b> <br/>
                 <div>
                     {{$chamado->subcategoria->categoria->nome}} - {{$chamado->subcategoria->nome}}
                 </div>
-                <div class="ui search fluid selection dropdown d-none">
-                    <input type="hidden" id="categoria_id" name="categoria_id" value="{{$chamado->subcategoria->id}}">
-                    <i class="dropdown icon"></i>
-                    <div class="default text">{{$chamado->subcategoria->categoria->setor->nome}} - {{$chamado->subcategoria->categoria->nome}}</div>
-                    <div class="menu">
-                        <div class="item" data-value="{{$chamado->subcategoria->id}}">{{$chamado->subcategoria->categoria->setor->nome}} - {{$chamado->subcategoria->categoria->nome}}</div>
-                        @foreach($subcategorias->whereNotIn('id', $chamado->subcategoria->id) as $subcategoria)
-                            <div class="item" data-value="{{$subcategoria->id}}"> {{$subcategoria->categoria->setor->nome}} - {{$subcategoria->categoria->nome}}</div>
-                        @endforeach
-                    </div>
-                </div>
             </div>
-            <div class="campos-item">
-                <b>E-mail</b>
+            <div class="description medium">
+                <b>E-mail:</b>
                 <div>
                     <a class="popup" data-content="Abrir com aplicativo externo" href="mailto:{{ $chamado->email}}">{{ $chamado->email}} <i class="external alternate icon"></i></a>
                 </div>
             </div>
-            <div class="campos-item">
-                <b>Telefone</b>
+            <div class="description medium">
+                <b>Telefone:</b>
                 <div class="popup">
                     2199999-3333
                 </div>
             </div>
-            <div class="campos-item">
-                <b>Data conclusão</b>
-                <div class="date">
-                    @if($chamado->data_conclusao) {{ Carbon\Carbon::parse($chamado->data_conclusao)->format('d/m/Y H:i')}} @else <br/> @endif
+            <div class="description medium">
+                <div class="campos-item">
+                    <b>Data conclusão:</b>
+                    <div class="date">
+                        @if($chamado->data_conclusao) {{ Carbon\Carbon::parse($chamado->data_conclusao)->format('d/m/Y H:i')}} @else <br/> @endif
+                    </div>
                 </div>
+            </div>
+            
+            <div class="description">
+                
             </div>
         </div>
     </div>
@@ -231,12 +257,6 @@
                     Enviar mensagem
                     <i class="paper plane icon"></i>
                 </button>
-                    {{-- <button class="ui positive right labeled icon button"
-                        onclick="enviarMensagem({remetente_id: {{ Auth::user()->id}},
-                        chamado_id: {{$chamado->id}}})">
-                        Enviar mensagem
-                        <i class="paper plane icon"></i>
-                    </button> --}}
                 @endif
             </div>    
             </form>
