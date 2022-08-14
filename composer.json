@@ -8,11 +8,14 @@
         "php": "^8.0.2",
         "bensampo/laravel-enum": "^5.3",
         "guzzlehttp/guzzle": "^7.2",
+        "laravel/breeze": "1.9.2",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
-        "laravel/tinker": "^2.7"
+        "laravel/tinker": "^2.7",
+        "power-components/livewire-powergrid": "^3.2"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.7",
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.0.1",

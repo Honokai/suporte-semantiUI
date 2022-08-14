@@ -15,6 +15,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use ErrorException;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -33,11 +34,23 @@ class ChamadosController extends Controller
 
     public function create()
     {
+
         return view('chamado.create')->with(
             [
                 "setores" => Setores::all(),
                 "localizacoes" => Localizacao::all(),
-                "subcategorias" => Subcategoria::all()
+                "subcategorias" => Subcategoria::join(
+                    'categorias',
+                    'subcategorias.categoria_id',
+                    'categorias.id'
+                )->join('setores', 'categorias.setor_id', 'setores.id')
+                ->select(
+                    'subcategorias.id',
+                    'setores.nome as nome',
+                    'categorias.nome as categoria_nome',
+                    'subcategorias.nome as subcategoria_nome',
+                    'subcategorias.deleted_at'
+                )->orderBy('setores.nome')->get()
             ]
         );
     }
@@ -49,7 +62,7 @@ class ChamadosController extends Controller
                 $chamado = new Chamados($request->except(['_token', 'ramal', 'anexos']));
                 $chamado->solicitante = Auth::user()->name;
                 $chamado->save();
-                
+
                 $chamado->hasAnexo($request);
             });
 
@@ -62,32 +75,39 @@ class ChamadosController extends Controller
 
     public function update(Request $request, Chamados $chamado)
     {
+        $usuario_id = auth()->user()->id;
         try {
-            DB::transaction(function () use ($chamado, $request) {
-                if($request->has('mudar_categoria_id')) {
-                    $chamado->categoria_id = $request->mudar_categoria_id;
-                }
+            if($request->has('mudar_categoria_id')) {
+                $chamado->categoria_id = $request->mudar_categoria_id;
+            }
 
-                if($chamado->status == "aberto" && auth()->user()->setor_id == $chamado->subcategoria->categoria->setor->id) {
-                    $chamado->status = StatusTipo::ANDAMENTO;
-                }
+            if($chamado->status == "aberto" && auth()->user()->setor_id == $chamado->subcategoria->categoria->setor->id) {
+                $chamado->status = StatusTipo::ANDAMENTO;
+            }
 
-                if(auth()->user()->setor_id == $chamado->subcategoria->categoria->setor->id) {
-                    $chamado->responsavel_id = Auth::user()->id;
-                }
+            if(auth()->user()->setor_id == $chamado->subcategoria->categoria->setor->id) {
+                $chamado->responsavel_id = $usuario_id;
+            }
 
-                if($request->has('status')) {
-                    if($request->status == 'encerrado') {
-                        $chamado->data_conclusao = Carbon::now();
-                    }
-                    $chamado->status = StatusTipo::coerce($request->status);
+            if($request->has('status')) {
+                if($request->status == 'encerrado') {
+                    $chamado->data_conclusao = Carbon::now();
                 }
+                $chamado->status = StatusTipo::coerce(strtoupper($request->status));
+            }
 
+            if($chamado->solicitante_id == $usuario_id) {
+                $chamado->respondido = 1;
+            } else {
+                $chamado->respondido = 0;
+            }
+
+            DB::transaction(function () use ($chamado, $request, $usuario_id) {
                 $chamado->hasAnexo($request);
 
                 $chamado->mensagens()->create([
                     'mensagem' => $request->mensagem,
-                    'remetente_id' => auth()->user()->id
+                    'remetente_id' => $usuario_id
                 ]);
                 
                 $chamado->update();
@@ -99,18 +119,5 @@ class ChamadosController extends Controller
             info($th);
             abort(403, 'Ocorreu um erro ao tentar processar sua requisição em atualizar.');
         }
-    }
-
-    public function showChamadoSetor($setor)
-    {
-        try {
-            $setor = Setores::select('id')->where('setor', ''.$setor.'')->get();
-            return view('chamados')
-                ->with('chamados', Chamados::where('setor_id', $setor[0]->id)
-                ->get());
-        } catch(ErrorException $excecao) {
-            return view('chamados')->with('chamados', []);
-        }
-
     }
 }

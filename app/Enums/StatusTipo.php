@@ -11,8 +11,8 @@ use BenSampo\Enum\Enum;
  */
 final class StatusTipo extends Enum
 {
-    const ABERTO =   "aberto";
-    const ANDAMENTO =   "em andamento";
-    const ENCERRADO = "encerrado";
-    const REABERTO = "reaberto";
+    const ABERTO =   1;
+    const ANDAMENTO =   2;
+    const ENCERRADO = 2;
+    const REABERTO = 0;
 }

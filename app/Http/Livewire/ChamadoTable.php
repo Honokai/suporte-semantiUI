@@ -16,15 +16,11 @@ use Stringable;
 final class ChamadoTable extends PowerGridComponent
 {
     use ActionButton;
-
+    
+    public string $sortField = '';
+    public string $sortDirection = '';
     public string $setor;
-    /*
-    |--------------------------------------------------------------------------
-    |  Features Setup
-    |--------------------------------------------------------------------------
-    | Setup Table's general features
-    |
-    */
+
     public function setUp(): array
     {
         return [
@@ -38,20 +34,21 @@ final class ChamadoTable extends PowerGridComponent
         ];
     }
 
-    public function datasource(): Collection
+    public function datasource()
     {
         return Chamados::hydrate(DB::select(DB::raw('
-        select c.id id, c.solicitante solicitante,
-                c.created_at aberto_em, c.status status,
+        select c.id, c.solicitante solicitante,
+                c.created_at aberto_em, c.status,
                 concat(ca.nome, \' - \', s.nome) categoria,
-                c.data_conclusao conclusao, u.name responsavel
+                c.data_conclusao conclusao, u.name responsavel,
+                c.respondido
                 from chamados c
             join subcategorias s on c.subCategoria_id = s.id
             join categorias ca on s.categoria_id = ca.id
             join setores se on se.id = ca.setor_id
             left join users u on u.id = c.responsavel_id
             where se.nome = \''. $this->setor . '\'
-           ;
+            order by c.respondido desc, c.status asc, c.id desc
         ')));
     }
 
@@ -63,7 +60,26 @@ final class ChamadoTable extends PowerGridComponent
     public function addColumns(): PowerGridEloquent
     {
         return PowerGrid::eloquent()
-            ->addColumn('status', fn (Chamados $model) => Str::title($model->status))
+            ->addColumn('status', function (Chamados $model) {
+                $respondido = $model->respondido ? " (respondido)" : '';
+                switch ($model->status) {
+                    case 0:
+                        return "Reaberto$respondido";
+                        break;
+                    case 1:
+                        return "Aberto$respondido";
+                        break;
+                    case 2:
+                        return "Em andamento$respondido";
+                        break;
+                    case 3:
+                        return "Encerrado$respondido";
+                        break;
+                    default:
+                        return $model->status;
+                        break;
+                }
+            })
             ->addColumn('conclusao', fn (Chamados $model) => $model->conclusao ? Carbon::parse($model->data_conclusao)->format('d/m/Y H:i:s') : "")
             ->addColumn('aberto_em', function (Chamados $model) {
                 return Carbon::parse($model->aberto_em)->format('d/m/Y H:i:s');
@@ -74,8 +90,7 @@ final class ChamadoTable extends PowerGridComponent
     {
         return [
             Column::make('ID', 'id')
-                ->searchable()
-                ->sortable(),
+                ->searchable(),
             
             Column::make('Estado', 'status')
                 ->searchable()
@@ -145,7 +160,7 @@ final class ChamadoTable extends PowerGridComponent
     {
        return [
             Rule::rows()
-                ->when(fn($chamados) => $chamados->status === 'aberto')
+                ->when(fn($chamados) => $chamados->status == 1)
                 ->setAttribute('class', 'aberto'),
         ];
     }

@@ -1,0 +1,9 @@
+.aberto {
+    background-color: rgb(255, 143, 143);
+}
+
+.aberto:hover {
+    background-color: rgb(255, 143, 143);
+    filter: brightness(0.9);
+    cursor: pointer;
+}

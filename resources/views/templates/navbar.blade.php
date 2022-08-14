@@ -26,22 +26,8 @@
                     <div class="header">
                         Administração
                     </div>
-                    <div class="item">
-                        <i class="dropdown icon"></i>
-                        <span class="text">Categoria</span>
-                        <div class="menu">
-                            <a href="{{route('categorias.create')}}" class="item">Nova</a>
-                            <a href="{{route('categorias.index')}}" class="item">Gerenciar</a>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <i class="dropdown icon"></i>
-                        <span class="text">Setor</span>
-                        <div class="menu">
-                            <a href="{{route('setores.create')}}" class="item">Novo</a>
-                            <a href="#" class="item">Gerenciar</a>
-                        </div>
-                    </div>
+                    <a href="{{route('categorias.index')}}" class="item">Categorias</a>
+                    <a href="{{route('setores.index')}}" class="item">Setores</a>
                     <div class="item">
                         <i class="dropdown icon"></i>
                         <span class="text">Usuário</span>

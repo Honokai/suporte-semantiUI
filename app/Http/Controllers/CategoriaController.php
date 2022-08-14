@@ -14,7 +14,6 @@ class CategoriaController extends Controller
 
     public function index()
     {
-        $this->authorize('viewAny', Categoria::class);
         return view('categoria.index')->with('categorias', Categoria::all());
     }
 

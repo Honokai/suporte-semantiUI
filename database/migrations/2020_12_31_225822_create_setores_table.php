@@ -20,6 +20,7 @@ class CreateSetoresTable extends Migration
             // $table->foreignIdFor(User::class, 'gestor')->default(1);
             // $table->enum('cargo', ['colaborador', 'gestor', 'estagiario']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

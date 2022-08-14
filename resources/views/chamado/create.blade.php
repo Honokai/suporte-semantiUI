@@ -16,6 +16,7 @@
         padding: 1rem 0;
     }
 </style>
+
 @if(session('suporte'))
     <script>
         window.parent.location.href = "{{route('chamado.index', ['nomeSetor' => session('suporte')])}}"
@@ -64,7 +65,7 @@
                     <div class="default text">Categoria do problema</div>
                     <div class="menu">
                         @foreach($subcategorias as $subcategoria)
-                            <div class="item" data-value="{{$subcategoria->id}}"> ({{$subcategoria->categoria->setor->nome}}) {{ $subcategoria->categoria->nome }} - {{ $subcategoria->nome }}</div>
+                            <div class="item" data-value="{{$subcategoria->id}}"> ({{$subcategoria->nome}}) {{ $subcategoria->categoria_nome }} - {{ $subcategoria->subcategoria_nome }}</div>
                         @endforeach
                     </div>
                 </div>

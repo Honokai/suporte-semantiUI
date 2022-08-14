@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\HasAnexo;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Chamados extends Model
 {
     use HasFactory;
+    use HasAnexo;
 
     protected $guarded = [];
 

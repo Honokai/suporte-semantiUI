@@ -25,7 +25,9 @@ class CreateChamadosTable extends Migration
             $table->string('telefone')->nullable(true);
             $table->string('solicitacao');
             $table->string('status')->default(StatusTipo::ABERTO);
-            $table->foreignId('responsavel_id')->references('id')->on('users')->constrained('users')->nullable(true);
+            $table->tinyInteger('respondido')->default(0);
+            $table->tinyInteger('transferido')->default(0);
+            $table->foreignId('responsavel_id')->nullable(true)->references('id')->on('users')->constrained('users');
             $table->timestamps();
             $table->dateTime('data_conclusao')->nullable();
         });
