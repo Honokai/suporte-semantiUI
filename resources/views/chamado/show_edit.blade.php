@@ -65,6 +65,10 @@
         .ui.form {
             display: none;
         }
+
+        .actions {
+            display: none;
+        }
     }
 
     .d-none {
