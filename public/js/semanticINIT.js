@@ -13,10 +13,10 @@ window.addEventListener('load', () => {
     */
 })
 
-function abrirModal(id) {
-    if(id > 0){
+function abrirModal(route) {
+    if(route){
         let iframe = document.getElementById('iframe')
-        iframe.src = `/chamado/${id}`
+        iframe.src = `${route}`
         $('.longer.modal').modal({
             centered: false,
             onApprove : function() {

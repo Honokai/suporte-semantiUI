@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ChamadosController;
+use App\Http\Controllers\SetoresController;
 use App\Http\Controllers\SubcategoriaController;
 use App\Models\Chamados;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +21,7 @@ Route::middleware('auth')->group(function(){
     
     Route::put('categorias/{categoria}/restore', [CategoriaController::class, 'restore'])->name('categorias.restore');
     Route::put('subcategorias/{subcategoria}/restore', [SubcategoriaController::class, 'restore'])->name('subcategorias.restore');
+    Route::put('setores/{setor}/restore', [SetoresController::class, 'restore'])->name('setores.restore');
 
     Route::get('chamados/{nomeSetor}', [ChamadosController::class, 'index'])->name('chamado.index');
     Route::get('chamado/{chamado}', [ChamadosController::class, 'show'])->name('chamado.show');
