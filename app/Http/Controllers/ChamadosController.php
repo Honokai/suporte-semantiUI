@@ -24,7 +24,26 @@ class ChamadosController extends Controller
 
     public function show(Chamados $chamado)
     {
-        return view('chamado.show_edit')->with(["chamado" => $chamado, "subcategorias" => Subcategoria::all()]);
+        return view('chamado.show_edit')->with(
+            [
+                "chamado" => $chamado,
+                "subcategorias" => Subcategoria::join(
+                    'categorias',
+                    'subcategorias.categoria_id',
+                    'categorias.id'
+                )->join('setores', 'categorias.setor_id', 'setores.id')
+                ->select(
+                    'subcategorias.id',
+                    'setores.nome as nome',
+                    'categorias.nome as categoria_nome',
+                    'subcategorias.nome as subcategoria_nome',
+                    'subcategorias.deleted_at'
+                )->where('subcategorias.deleted_at', null)
+                ->whereNot('setores.nome', $chamado->subcategoria->categoria->setor->nome)
+                ->where('setores.deleted_at', null)
+                ->where('categorias.deleted_at', null)->orderBy('setores.nome')->get()
+            ]
+        );
     }
 
     public function create()
@@ -80,9 +99,8 @@ class ChamadosController extends Controller
             }
 
             if (auth()->user()->setor_id == $chamado->subcategoria->categoria->setor->id) {
-                
                 if($request->has('mudar_categoria_id')) {
-                    $chamado->categoria_id = $request->mudar_categoria_id;
+                    $chamado->subcategoria_id = $request->mudar_categoria_id;
                 }
                 
                 if($chamado->status == "aberto") {
@@ -103,11 +121,13 @@ class ChamadosController extends Controller
             DB::transaction(function () use ($chamado, $request, $usuario_id) {
                 $chamado->hasAnexo($request);
 
-                $chamado->mensagens()->create([
-                    'mensagem' => $request->mensagem,
-                    'remetente_id' => $usuario_id
-                ]);
-                
+                if(!$request->mudar_categoria_id) {
+                    $chamado->mensagens()->create([
+                        'mensagem' => $request->mensagem,
+                        'remetente_id' => $usuario_id
+                    ]);
+                }
+
                 $chamado->update();
             });
 

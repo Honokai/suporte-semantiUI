@@ -24,7 +24,7 @@ class ChamadoUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'mensagem' => 'required',
+            'mensagem' => 'required_if:mudar_categoria_id,null',
         ];
     }
 }

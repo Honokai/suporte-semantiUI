@@ -41,6 +41,10 @@
         margin: 1rem !important;
     }
 
+    .myt-p {
+        margin: .4rem 0 0 0;
+    }
+
     .p-1 {
         padding: 0 .5rem;
     }
@@ -119,14 +123,10 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="description">
-                
-            </div>
         </div>
     </div>
-    <div class="scrolling" style="display:flex; flex: 2; flex-direction: column; padding: 10px">
-        <div style="flex: 3;">
+    <div style="display:flex; flex: 2; flex-direction: column; padding: 10px">
+        <div>
             <form method="POST" action="{{route('chamados.update', ['chamado' => $chamado->id])}}" id="form_chamado" enctype="multipart/form-data">
                 @if(Auth::user()->id == $chamado->solicitante_id || Auth::user()->setor_id == $chamado->subcategoria->categoria->setor->id)
                 <div class="ui form" style="flex: 1">
@@ -145,7 +145,7 @@
                     @enderror
                     <div class="ui middle aligned grid">
                         <div class="column">
-                            <div style="padding: 2px; display:block">
+                            <div class="row" style="padding: 2px; display:block">
                                 <label for="file" class="ui icon button" style="max-width: 200px">
                                     <i class="file icon"></i>
                                     Anexar arquivo</label>
@@ -155,7 +155,11 @@
                                         <input type="checkbox" name="status" value="encerrado" id="status">
                                         <label for="status">Encerrar</label>
                                     </div>
-                                    @elseif((Auth::user()->setor_id == $chamado->subcategoria->categoria->setor->id || Auth::user()->id == $chamado->solicitante_id) && $chamado->status == 3)
+                                    <div class="ui checkbox">
+                                        <input onchange="habilitarTransferencia()" type="checkbox" id="transferir">
+                                        <label for="transferir">Transferir</label>
+                                    </div>
+                                @elseif((Auth::user()->setor_id == $chamado->subcategoria->categoria->setor->id || Auth::user()->id == $chamado->solicitante_id) && $chamado->status == 3)
                                     <div class="ui checkbox">
                                         <input onchange="reabrirChamado()" type="checkbox" name="status" value="reaberto" id="status">
                                         <label for="status">Reabrir</label>
@@ -179,60 +183,75 @@
                         @endforeach
                     </div>
                     @endif
-                    <div class="description">
-                        <div class="ui comments" id="conversa">
-                            <h3 class="ui dividing header">Conversa</h3>
-                            <div class="comment">
-                                <a class="avatar">
-                                    <img src="https://semantic-ui.com/images/avatar/small/elliot.jpg">
-                                </a>
-                                <div class="content">
-                                    <a class="author">{{$chamado->solicitante}}</a>
-                                    <div class="metadata">
-                                        <span class="date">{{date('d/m/Y H:i', strtotime($chamado->created_at))}}</span>
-                                    </div>
-                                    <div class="ui visible message" style="white-space: pre-wrap">{{$chamado->solicitacao}}</div>
-                                </div>
-                            </div>
-                            @foreach ($chamado->mensagens as $mensagem)
-                            <div class="comment">
-                                <a class="avatar">
-                                    <img src="https://semantic-ui.com/images/avatar/small/elliot.jpg">
-                                </a>
-                                <div class="content">
-                                    <a class="author">{{$mensagem->remetente->name}}</a>
-                                    <div class="metadata">
-                                        <span class="date">{{date('d/m/Y H:i', strtotime($mensagem->created_at))}}</span>
-                                    </div>
-                                    <div class="ui visible message" style="white-space: pre-wrap">{{$mensagem->mensagem}}</div>
-                                </div>
-                            </div>
+                </div>
+            </form>
+            <div id="transferencia" class="row d-none">
+                <form action="{{route('chamados.update', ['chamado' => $chamado->id])}}" method="POST">
+                    @csrf
+                    @method('put')
+                    <div class="ui fluid labeled search selection dropdown @error('subcategoria_id') error @enderror" @error('subcategoria_id') data-content="{{$message}}" @enderror>
+                        <input type="hidden" id="categoria_id" name="mudar_categoria_id">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">Categoria do problema</div>
+                        <div class="menu">
+                            @foreach($subcategorias as $subcategoria)
+                                <div class="item" data-value="{{$subcategoria->id}}"> ({{$subcategoria->nome}}) {{ $subcategoria->categoria_nome }} - {{ $subcategoria->subcategoria_nome }}</div>
                             @endforeach
                         </div>
                     </div>
+                    <button type="submit" class="ui positive right labeled icon button">
+                        Transferir
+                        <i class="exchange icon"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="scrolling" style="flex: 2">
+            <div class="description">
+                <div class="ui comments" id="conversa">
+                    <h3 class="ui dividing header">Conversa</h3>
+                    <div class="comment">
+                        <a class="avatar">
+                            <img src="https://semantic-ui.com/images/avatar/small/elliot.jpg">
+                        </a>
+                        <div class="content">
+                            <a class="author">{{$chamado->solicitante}}</a>
+                            <div class="metadata">
+                                <span class="date">{{date('d/m/Y H:i', strtotime($chamado->created_at))}}</span>
+                            </div>
+                            <div class="ui visible message" style="white-space: pre-wrap">{{$chamado->solicitacao}}</div>
+                        </div>
+                    </div>
+                    @foreach ($chamado->mensagens as $mensagem)
+                    <div class="comment">
+                        <a class="avatar">
+                            <img src="https://semantic-ui.com/images/avatar/small/elliot.jpg">
+                        </a>
+                        <div class="content">
+                            <a class="author">{{$mensagem->remetente->name}}</a>
+                            <div class="metadata">
+                                <span class="date">{{date('d/m/Y H:i', strtotime($mensagem->created_at))}}</span>
+                            </div>
+                            <div class="ui visible message" style="white-space: pre-wrap">{{$mensagem->mensagem}}</div>
+                        </div>
+                    </div>
+                    @endforeach
                 </div>
             </div>
-            <div class="actions">
-                @if (Auth::user()->setor_id == $chamado->subcategoria->categoria->setor->id && $chamado->status != 3)
-                    <div class="ui checkbox">
-                        <input type="checkbox" name="status" value="encerrado" id="status">
-                        <label for="status">Encerrar</label>
-                    </div>
-        
-                @elseif((Auth::user()->setor_id == $chamado->subcategoria->categoria->setor->id || Auth::user()->id == $chamado->solicitante_id) && $chamado->status == 3)
-                    <button class="ui positive right labeled icon button">
-                        Enviar mensagem
-                        <i class="paper plane icon"></i>
-                    </button>
-                @endif
-                @if ((Auth::user()->id == $chamado->solicitante_id || Auth::user()->setor_id == $chamado->subcategoria->categoria->setor->id) && $chamado->status != 3)
-                <button class="ui positive right labeled icon button">
-                    Enviar mensagem
+        </div>
+        <div class="actions myt-p">
+            @if((Auth::user()->setor_id == $chamado->subcategoria->categoria->setor->id || Auth::user()->id == $chamado->solicitante_id) && $chamado->status == 3)
+                <button onclick="submitForm()" class="ui primary right labeled icon button">
+                    Reabrir chamado
                     <i class="paper plane icon"></i>
                 </button>
-                @endif
-            </div>
-            </form>
+            @endif
+            @if ((Auth::user()->id == $chamado->solicitante_id || Auth::user()->setor_id == $chamado->subcategoria->categoria->setor->id) && $chamado->status != 3)
+            <button type="submit" onclick="submitForm()" class="ui positive right labeled icon button">
+                Enviar mensagem
+                <i class="paper plane icon"></i>
+            </button>
+            @endif
         </div>
     </div>
 </div>
@@ -245,6 +264,20 @@
         document.getElementById('status').checked ?
             document.getElementById('field_mensagem').classList.remove('disabled') :
             document.getElementById('field_mensagem').classList.add('disabled')
+    }
+
+    function habilitarTransferencia()
+    {
+        if(document.getElementById('transferir').checked)
+            document.getElementById('transferencia').classList.remove('d-none')
+        else
+            document.getElementById('transferencia').classList.add('d-none')
+    }
+
+
+    function submitForm()
+    {
+        document.getElementById('form_chamado').submit()
     }
 </script>
 @endsection
