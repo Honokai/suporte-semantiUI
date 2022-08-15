@@ -132,10 +132,17 @@
                 <div class="ui form" style="flex: 1">
                     @csrf
                     @method('PUT')
-                    <div id="field_mensagem" class="field @if($chamado->status == 3) disabled @endif">
+                    <div id="field_mensagem" 
+                        class="field @if($chamado->status == 3) disabled @endif"
+                    >
                         <label>Descreva o problema/situação:</label>
                         <textarea id="mensagem" name="mensagem" rows="3"></textarea>
                     </div>
+                    @error('mensagem')
+                        <div class="ui negative message">
+                            {{$message}}
+                        </div>
+                    @enderror
                     <div class="ui middle aligned grid">
                         <div class="column">
                             <div style="padding: 2px; display:block">
@@ -231,6 +238,7 @@
 </div>
 <script>
     $('.popup').popup();
+    $('.ui .form .field').popup();
 
     function reabrirChamado()
     {

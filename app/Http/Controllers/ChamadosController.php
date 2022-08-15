@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\StatusTipo;
 use App\Http\Requests\ChamadoStoreRequest;
+use App\Http\Requests\ChamadoUpdateRequest;
 use App\Models\Chamados;
 use App\Models\Localizacao;
 use App\Models\Setores;
@@ -68,7 +69,7 @@ class ChamadosController extends Controller
         }
     }
 
-    public function update(Request $request, Chamados $chamado)
+    public function update(ChamadoUpdateRequest $request, Chamados $chamado)
     {
         $usuario_id = auth()->user()->id;
         try {
