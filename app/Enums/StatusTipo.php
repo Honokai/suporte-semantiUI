@@ -13,6 +13,6 @@ final class StatusTipo extends Enum
 {
     const ABERTO =   1;
     const ANDAMENTO =   2;
-    const ENCERRADO = 2;
+    const ENCERRADO = 3;
     const REABERTO = 0;
 }

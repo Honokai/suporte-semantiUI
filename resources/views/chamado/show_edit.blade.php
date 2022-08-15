@@ -1,51 +1,6 @@
 @extends('templates.layout')
 @section('conteudo')
 <style>
-    .chamado-card {
-        flex: 1;
-        background: #6f7074;
-        margin: 10px 0 10px 5px;
-        border-radius: 4px;
-        color: rgb(255, 255, 255);
-        padding: 1rem 0.8rem;
-    }
-
-    .actions {
-        padding: .5rem 0;
-    }
-    .chamado-card > .header {
-        flex: 1;
-        font-size: 1.5rem;
-    }
-
-    .chamado-info {
-        flex: 1;
-    }
-
-    .chamado-card .chamado-info .campos-item {
-        margin: 5px 0;
-        font-size: 1.15rem;
-    }
-
-    .campos-item div > a {
-        color: rgb(168, 168, 255);
-        font-weight: bolder;
-    }
-
-    .campos-item div > a:hover {
-        filter: brightness(0.9);
-    }
-
-    .chamado-card .chamado-info .campos-item > b+div {
-        font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-        border: 0;
-        line-height: 1.31428571em;
-        color: rgb(255, 255, 255);
-        max-height: 38px !important;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
     .scrolling {
         overflow: hidden;
         overflow-y: auto;
@@ -180,12 +135,33 @@
                     <div class="field">
                         <label>Descreva o problema/situação:</label>
                         <textarea id="mensagem" name="mensagem" rows="3"></textarea>
-                        <div style="padding: 2px">
-                            <label for="file" class="ui icon button" style="max-width: 200px">
-                                <i class="file icon"></i>
-                                Anexar arquivo</label>
-                            <input name="anexos[]" type="file" id="file" style="display:none">
+                    </div>
+                    <div class="ui middle aligned grid">
+                        <div class="column">
+                            <div style="padding: 2px; display:block">
+                                <label for="file" class="ui icon button" style="max-width: 200px">
+                                    <i class="file icon"></i>
+                                    Anexar arquivo</label>
+                                <input name="anexos[]" type="file" id="file" style="display:none">
+                                @if (Auth::user()->setor_id == $chamado->subcategoria->categoria->setor->id && $chamado->status != 3)
+                                    <div class="ui checkbox">
+                                        <input type="checkbox" name="status" value="encerrado" id="status">
+                                        <label for="status">Encerrar</label>
+                                    </div>
+                                    @elseif((Auth::user()->setor_id == $chamado->subcategoria->categoria->setor->id || Auth::user()->id == $chamado->solicitante_id) && $chamado->status == 3)
+                                    <div class="ui checkbox">
+                                        <input type="checkbox" name="status" value="reaberto" id="status">
+                                        <label for="status">Reabrir</label>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
+                        {{-- <div class="left aligned column">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="status" value="encerrado" id="status">
+                                <label for="status">Encerrar</label>
+                            </div>
+                        </div> --}}
                     </div>
                 </div>
                 @endif
@@ -243,10 +219,6 @@
                     </div>
         
                 @elseif((Auth::user()->setor_id == $chamado->subcategoria->categoria->setor->id || Auth::user()->id == $chamado->solicitante_id) && $chamado->status == 3)
-                    <div class="ui checkbox">
-                        <input type="checkbox" name="status" value="reaberto" id="status">
-                        <label for="status">Reabrir</label>
-                    </div>
                     <button class="ui positive right labeled icon button">
                         Enviar mensagem
                         <i class="paper plane icon"></i>

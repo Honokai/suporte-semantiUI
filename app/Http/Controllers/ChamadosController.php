@@ -66,7 +66,7 @@ class ChamadosController extends Controller
 
                 $chamado->hasAnexo($request);
             });
-            $table->softDeletes();
+
             return back()->with('suporte', Subcategoria::find($request->subcategoria_id)->categoria->setor->nome);
         } catch (\Throwable $th) {
             info($th);
@@ -78,29 +78,31 @@ class ChamadosController extends Controller
     {
         $usuario_id = auth()->user()->id;
         try {
-            if($request->has('mudar_categoria_id')) {
-                $chamado->categoria_id = $request->mudar_categoria_id;
-            }
-
-            if($chamado->status == "aberto" && auth()->user()->setor_id == $chamado->subcategoria->categoria->setor->id) {
-                $chamado->status = StatusTipo::ANDAMENTO;
-            }
-
-            if(auth()->user()->setor_id == $chamado->subcategoria->categoria->setor->id) {
-                $chamado->responsavel_id = $usuario_id;
-            }
-
-            if($request->has('status')) {
-                if($request->status == 'encerrado') {
-                    $chamado->data_conclusao = Carbon::now();
-                }
-                $chamado->status = StatusTipo::coerce(strtoupper($request->status));
-            }
-
             if($chamado->solicitante_id == $usuario_id) {
                 $chamado->respondido = 1;
             } else {
                 $chamado->respondido = 0;
+            }
+
+            if (auth()->user()->setor_id == $chamado->subcategoria->categoria->setor->id) {
+                
+                if($request->has('mudar_categoria_id')) {
+                    $chamado->categoria_id = $request->mudar_categoria_id;
+                }
+                
+                if($chamado->status == "aberto") {
+                    $chamado->status = StatusTipo::ANDAMENTO;
+                }
+
+                $chamado->responsavel_id = $usuario_id;
+
+                if($request->has('status')) {
+                    if($request->status == 'encerrado') {
+                        $chamado->data_conclusao = Carbon::now();
+                    }
+                    $chamado->status = StatusTipo::coerce(strtoupper($request->status));
+                    $chamado->respondido = 0;
+                }
             }
 
             DB::transaction(function () use ($chamado, $request, $usuario_id) {
