@@ -9,6 +9,8 @@ class Anexos extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function chamado()
     {
         return $this->belongsTo(Chamado::class);

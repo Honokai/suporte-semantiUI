@@ -9,6 +9,8 @@ class Mensagens extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function chamado()
     {
         return $this->belongsTo(Chamados::class, 'chamado_id', 'id');

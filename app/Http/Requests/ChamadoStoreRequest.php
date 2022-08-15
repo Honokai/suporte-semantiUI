@@ -29,10 +29,8 @@ class ChamadoStoreRequest extends FormRequest
     {
         return [
             'solicitante_id' => 'integer|required',
-            'categoria_id' => 'integer|required',
-            'setor_id' => 'integer|required',
-            'localizacao_id' => 'integer|required',
-            'mensagem' => 'required'
+            'subcategoria_id' => 'integer|required',
+            'solicitacao' => 'required'
         ];
     }
 }

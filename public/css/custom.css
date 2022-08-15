@@ -1,0 +1,29 @@
+.aberto {
+    background-color: rgb(255, 143, 143);
+}
+
+.aberto:hover {
+    background-color: rgb(255, 143, 143);
+    filter: brightness(0.9);
+    cursor: pointer;
+}
+
+.object-header {
+    display: flex;
+    width: 100%;
+    padding: 0.6rem;
+    background: peachpuff;
+    border-radius: 0.2rem;
+    color: rgb(66, 73, 79) !important;
+    border-bottom: rgb(226, 107, 107) 2px solid;
+    font-weight: 800;
+    font-size: 1.2rem;
+}
+
+.object-header+.object-header {
+    margin: 0.2rem 0;
+}
+
+.disabled > *:first-child {
+    text-decoration: line-through;
+}

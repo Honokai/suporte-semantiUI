@@ -1,5 +1,9 @@
 window.addEventListener('load', () => {
-    $('.ui.dropdown').dropdown();
+    $('.ui.dropdown').dropdown(
+        {
+            fullTextSearch: true
+        }
+    );
     /*
     $('.browse.item').popup({
         popup: '.menu.popup',
@@ -9,42 +13,24 @@ window.addEventListener('load', () => {
     */
 })
 
-function abrirModal(id) {
-    if(id > 0){
-        let xml = new XMLHttpRequest
-        xml.open('GET', `/chamado/${id}`)
-        xml.send()
-        xml.addEventListener('load', () => {
-            if(xml.status == 200) {
-                document.getElementById('modal').innerHTML = xml.responseText
-                $('.longer.modal').modal({
-                    centered: false,
-                    onApprove : function() {
-                      return false;
-                    }
-                  }).modal('show');
-                  ativarDropdown()
-            } else {
-                document.getElementById('modal').innerHTML = "Algo deu errado"
+function abrirModal(route) {
+    if(route){
+        let iframe = document.getElementById('iframe')
+        iframe.src = `${route}`
+        $('.longer.modal').modal({
+            centered: false,
+            onApprove : function() {
+              return false;
             }
-        })
+        }).modal('show');
     } else {
-        let xml = new XMLHttpRequest
-        xml.open('GET', `/chamados/create`)
-        xml.send()
-        xml.addEventListener('load', () => {
-            if(xml.status == 200) {
-                document.getElementById('modal').innerHTML = xml.responseText
-                $('.longer.modal').modal({
-                    onApprove : function() {
-                      return false;
-                    }
-                  }).modal('show');
-                  ativarDropdown()
-            } else {
-                document.getElementById('modal').innerHTML = "Algo deu errado"
+        let iframe = document.getElementById('iframe')
+        iframe.src = '/chamados/create'
+        $('.longer.modal').modal({
+            onApprove : function() {
+              return false;
             }
-        })
+          }).modal('show');
     }
 
 }
@@ -109,5 +95,8 @@ function enviarFormularioAbertura() {
 
 function ativarDropdown()
 {
-    $('.ui.selection.dropdown').dropdown({showOnFocus: false});
+    $('.ui.selection.dropdown').dropdown({
+        showOnFocus: false,
+        fullTextSearch: true
+    });
 }

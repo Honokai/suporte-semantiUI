@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Setores;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,9 +16,10 @@ class CreateCategoriasTable extends Migration
     {
         Schema::create('categorias', function (Blueprint $table) {
             $table->id();
-            $table->string('categoria');
-            $table->foreignId('setor_id')->constrained('setores');
+            $table->string('nome');
+            $table->foreignId('setor_id')->references('id')->on('setores')->constrained('setores');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

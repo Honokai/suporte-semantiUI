@@ -4,102 +4,138 @@ namespace App\Http\Controllers;
 
 use App\Enums\StatusTipo;
 use App\Http\Requests\ChamadoStoreRequest;
-use App\Models\Anexos;
-use App\Models\Categoria;
+use App\Http\Requests\ChamadoUpdateRequest;
 use App\Models\Chamados;
 use App\Models\Localizacao;
-use App\Models\Mensagens;
 use App\Models\Setores;
-use ErrorException;
+use App\Models\Subcategoria;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ChamadosController extends Controller
 {
     public function index(string $setor): View
     {
-        // dd(Chamados::find(1)->transferencias()->get()->first()->setorOrigem()->get()->nome);
-        return view("chamados")
-            ->with(
-                "chamados",
-                Setores::where("nome", $setor)->get()->first()->chamados()->get()
-            );
+        return view('chamado.index', ['setor' => $setor]);
     }
 
-    public function show($id)
+    public function show(Chamados $chamado)
     {
-        return view("chamado")->with(["chamado" => Chamados::find($id), "categorias" => Categoria::all()]);
+        return view('chamado.show_edit')->with(
+            [
+                "chamado" => $chamado,
+                "subcategorias" => Subcategoria::join(
+                    'categorias',
+                    'subcategorias.categoria_id',
+                    'categorias.id'
+                )->join('setores', 'categorias.setor_id', 'setores.id')
+                ->select(
+                    'subcategorias.id',
+                    'setores.nome as nome',
+                    'categorias.nome as categoria_nome',
+                    'subcategorias.nome as subcategoria_nome',
+                    'subcategorias.deleted_at'
+                )->where('subcategorias.deleted_at', null)
+                ->whereNot('setores.nome', $chamado->subcategoria->categoria->setor->nome)
+                ->where('setores.deleted_at', null)
+                ->where('categorias.deleted_at', null)->orderBy('setores.nome')->get()
+            ]
+        );
     }
 
     public function create()
     {
-        return view("novoChamado")->with(
+        return view('chamado.create')->with(
             [
                 "setores" => Setores::all(),
                 "localizacoes" => Localizacao::all(),
-                "categorias" => Categoria::all()
+                "subcategorias" => Subcategoria::join(
+                    'categorias',
+                    'subcategorias.categoria_id',
+                    'categorias.id'
+                )->join('setores', 'categorias.setor_id', 'setores.id')
+                ->select(
+                    'subcategorias.id',
+                    'setores.nome as nome',
+                    'categorias.nome as categoria_nome',
+                    'subcategorias.nome as subcategoria_nome',
+                    'subcategorias.deleted_at'
+                )->where('subcategorias.deleted_at', null)
+                ->where('setores.deleted_at', null)
+                ->where('categorias.deleted_at', null)->orderBy('setores.nome')->get()
             ]
         );
     }
 
     public function store(ChamadoStoreRequest $request)
     {
-        $chamado = new Chamados;
-        $chamado->solicitante_id = $request->solicitante_id;
-        $chamado->setor_id = $request->setor_id;
-        $chamado->categoria_id = $request->categoria_id;
-        $chamado->localizacao_id = $request->localizacao_id;
-        $chamado->status = StatusTipo::ABERTO;
-        $chamado->save();
-        $mensagem = new Mensagens;
-        $mensagem->mensagem = $request->mensagem;
-        $mensagem->chamado_id = $chamado->id;
-        $mensagem->remetente_id = $request->solicitante_id;
-        $chamado->mensagens()->save($mensagem);
+        try {
+            DB::transaction(function () use ($request) {
+                $chamado = new Chamados($request->except(['_token', 'ramal', 'anexos']));
+                $chamado->solicitante = Auth::user()->name;
+                $chamado->save();
 
-        if($request->hasFile('anexos')) {
-            $anexo = new Anexos;
-            foreach($request->file('anexos') as $arquivo) {
-                # armazena o arquivo em si e salva o caminho para armazenamento no banco
-                $caminho = $arquivo->store("\\anexos\\{$chamado->id}", ['disk' => 'public']);
-                if($caminho) {
-                    $anexo->anexo = str_replace('/','\\',$caminho);
-                    $anexo->chamados_id = $chamado->id;
-                    $anexo->save();
+                $chamado->hasAnexo($request);
+            });
+
+            return back()->with('suporte', Subcategoria::find($request->subcategoria_id)->categoria->setor->nome);
+        } catch (\Throwable $th) {
+            info($th);
+            abort(403, 'Ocorreu um erro ao tentar processar sua requisição em armazenar.');
+        }
+    }
+
+    public function update(ChamadoUpdateRequest $request, Chamados $chamado)
+    {
+        $usuario_id = auth()->user()->id;
+        try {
+            if($chamado->solicitante_id == $usuario_id) {
+                $chamado->respondido = 1;
+            } else {
+                $chamado->respondido = 0;
+            }
+
+            if (auth()->user()->setor_id == $chamado->subcategoria->categoria->setor->id) {
+                if($request->has('mudar_categoria_id')) {
+                    $chamado->subcategoria_id = $request->mudar_categoria_id;
+                }
+                
+                if($chamado->status == "aberto") {
+                    $chamado->status = StatusTipo::ANDAMENTO;
+                }
+
+                $chamado->responsavel_id = $usuario_id;
+
+                if($request->has('status')) {
+                    if($request->status == 'encerrado') {
+                        $chamado->data_conclusao = Carbon::now();
+                    }
+                    $chamado->status = StatusTipo::coerce(strtoupper($request->status));
+                    $chamado->respondido = 0;
                 }
             }
-        }
 
-        return view('chamados')->with("chamados", Chamados::all());
-    }
+            DB::transaction(function () use ($chamado, $request, $usuario_id) {
+                $chamado->hasAnexo($request);
 
-    public function update(Request $request, $id)
-    {
-        $chamado = Chamados::find($id);
-        if($request->filled(['categoria_id', 'setor_id', 'localizacao_id'])) {
-            $chamado->categoria_id = $request->id;
-            $chamado->setor_id = $request->setor_id;
-            $chamado->localizacao_id = $request->localizacao->id;
-            $chamado->update();
-        }
-        if($request->has('status') && StatusTipo::coerce($request->status)) {
-            $chamado->status = StatusTipo::coerce($request->status);
-            $chamado->update();
-        }
-        return view('chamados')->with("chamados", Chamados::all());
-    }
+                if(!$request->mudar_categoria_id) {
+                    $chamado->mensagens()->create([
+                        'mensagem' => $request->mensagem,
+                        'remetente_id' => $usuario_id
+                    ]);
+                }
 
-    public function showChamadoSetor($setor)
-    {
-        try {
-            $setor = Setores::select('id')->where('setor', ''.$setor.'')->get();
-            return view('chamados')
-                ->with('chamados', Chamados::where('setor_id', $setor[0]->id)
-                ->get());
-        } catch(ErrorException $excecao) {
-            return view('chamados')->with('chamados', []);
-        }
+                $chamado->update();
+            });
 
+            return back()->with('suporte', Subcategoria::find($request?->subcategoria_id ?? $chamado->subcategoria->id)->categoria->setor->nome);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            info($th);
+            abort(403, 'Ocorreu um erro ao tentar processar sua requisição em atualizar.');
+        }
     }
 }
