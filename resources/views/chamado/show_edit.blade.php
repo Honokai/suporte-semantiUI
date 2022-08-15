@@ -132,7 +132,7 @@
                 <div class="ui form" style="flex: 1">
                     @csrf
                     @method('PUT')
-                    <div class="field">
+                    <div id="field_mensagem" class="field @if($chamado->status == 3) disabled @endif">
                         <label>Descreva o problema/situação:</label>
                         <textarea id="mensagem" name="mensagem" rows="3"></textarea>
                     </div>
@@ -150,18 +150,12 @@
                                     </div>
                                     @elseif((Auth::user()->setor_id == $chamado->subcategoria->categoria->setor->id || Auth::user()->id == $chamado->solicitante_id) && $chamado->status == 3)
                                     <div class="ui checkbox">
-                                        <input type="checkbox" name="status" value="reaberto" id="status">
+                                        <input onchange="reabrirChamado()" type="checkbox" name="status" value="reaberto" id="status">
                                         <label for="status">Reabrir</label>
                                     </div>
                                 @endif
                             </div>
                         </div>
-                        {{-- <div class="left aligned column">
-                            <div class="ui checkbox">
-                                <input type="checkbox" name="status" value="encerrado" id="status">
-                                <label for="status">Encerrar</label>
-                            </div>
-                        </div> --}}
                     </div>
                 </div>
                 @endif
@@ -230,12 +224,19 @@
                     <i class="paper plane icon"></i>
                 </button>
                 @endif
-            </div>    
+            </div>
             </form>
         </div>
     </div>
 </div>
 <script>
     $('.popup').popup();
+
+    function reabrirChamado()
+    {
+        document.getElementById('status').checked ?
+            document.getElementById('field_mensagem').classList.remove('disabled') :
+            document.getElementById('field_mensagem').classList.add('disabled')
+    }
 </script>
 @endsection

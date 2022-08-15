@@ -24,6 +24,7 @@
 @endif
 <form method="POST" action="{{route('chamados.store')}}" enctype="multipart/form-data">
     @csrf
+
     <input type="hidden" name="solicitante_id" value="{{Auth::user()->id}}">
     <div class="ui container py-1" style="height: 100vh">
         <div style="padding: 10px 0;">

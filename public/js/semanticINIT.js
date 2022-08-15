@@ -23,23 +23,6 @@ function abrirModal(route) {
               return false;
             }
         }).modal('show');
-        // let xml = new XMLHttpRequest
-        // xml.open('GET', `/chamado/${id}`)
-        // xml.send()
-        // xml.addEventListener('load', () => {
-        //     if(xml.status == 200) {
-        //         document.getElementById('modal').innerHTML = xml.responseText
-        //         $('.longer.modal').modal({
-        //             centered: false,
-        //             onApprove : function() {
-        //               return false;
-        //             }
-        //           }).modal('show');
-        //           ativarDropdown()
-        //     } else {
-        //         document.getElementById('modal').innerHTML = "Algo deu errado"
-        //     }
-        // })
     } else {
         let iframe = document.getElementById('iframe')
         iframe.src = '/chamados/create'
