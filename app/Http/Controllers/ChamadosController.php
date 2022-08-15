@@ -4,18 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Enums\StatusTipo;
 use App\Http\Requests\ChamadoStoreRequest;
-use App\Models\Anexos;
-use App\Models\Categoria;
 use App\Models\Chamados;
 use App\Models\Localizacao;
-use App\Models\Mensagens;
 use App\Models\Setores;
 use App\Models\Subcategoria;
-use App\Models\User;
 use Carbon\Carbon;
-use ErrorException;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
