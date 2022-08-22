@@ -20,10 +20,12 @@
     @endisset
     @yield('conteudo')
     <div class="ui longer modal" id="modal">
+        <input type="text" style="display: none" value="{{ auth()->user()->id }}" id="channel">
         <iframe src="" id="iframe" style="height: 70vh; width: 100%" frameborder="0">
         </iframe>
     </div>
     @livewireScripts
     @powerGridScripts
+    <script src="/js/bootstrap.js"></script>
 </body>
 </html>

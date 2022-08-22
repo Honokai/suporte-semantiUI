@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\StatusTipo;
+use App\Events\ChamadoRespondidoEvent;
 use App\Http\Requests\ChamadoStoreRequest;
 use App\Http\Requests\ChamadoUpdateRequest;
 use App\Models\Chamados;
@@ -97,13 +98,12 @@ class ChamadosController extends Controller
             } else {
                 $chamado->respondido = 0;
             }
-
             if (auth()->user()->setor_id == $chamado->subcategoria->categoria->setor->id) {
                 if($request->has('mudar_categoria_id')) {
                     $chamado->subcategoria_id = $request->mudar_categoria_id;
                 }
                 
-                if($chamado->status == "aberto") {
+                if($chamado->status == "1") {
                     $chamado->status = StatusTipo::ANDAMENTO;
                 }
 
@@ -130,6 +130,7 @@ class ChamadosController extends Controller
 
                 $chamado->update();
             });
+            ChamadoRespondidoEvent::dispatch($chamado->id, $chamado->solicitante_id);
 
             return back()->with('suporte', Subcategoria::find($request?->subcategoria_id ?? $chamado->subcategoria->id)->categoria->setor->nome);
         } catch (\Throwable $th) {

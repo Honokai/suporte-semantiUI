@@ -28611,7 +28611,7 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_2__["default"]({
   forceTLS: true,
   disableStats: true
 });
-window.Echo.channel("comum").listen('.ChamadoRespondido', function (e) {
+window.Echo.channel(document.getElementById('channel').value).listen('.ChamadoRespondido', function (e) {
   if (Notification.permission == 'default') {
     Notification.requestPermission().then(function (permissao) {
       permissao == 'granted' ? new Notification(e.titulo, {
