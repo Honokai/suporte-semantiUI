@@ -56,4 +56,14 @@ class SetoresController extends Controller
         
         return back()->with('mensagem.positiva', 'Setor reativado.');
     }
+
+    public function edit(Setores $setore)
+    {
+        return view('setor.edit')->with('setor', $setore);
+    }
+
+    public function update(Setores $setore)
+    {
+        
+    }
 }

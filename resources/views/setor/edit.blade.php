@@ -1,29 +1,30 @@
-@extends('templates.layout', ['navbar' => true, 'titulo' => 'Setores'])
+@extends('templates.layout', ['titulo' => 'Setores'])
 @section('conteudo')
-<div class="ui container">
-@foreach ($categorias as $categoria)
-    <div style="display: flex; width: 100%; background: rgb(121, 156, 144); padding: .6rem">
-        <div style="flex:1">{{$categoria->nome}}</div>
-        <div style="display:flex; flex:1; justify-content:end">
-            <form style="display: inline" action="{{route('categorias.destroy',['categoria'=>$categoria->id])}}" method="POST">
-                @csrf
-                @method('delete')
-                <button class="ui red button" type="submit">Apagar</a>
-            </form>
-        <button class="ui primary button">Editar</button></div>
+<div class="ui container" style="height: 100%; display:flex; align-items: center; justify-content: center">
+    <div class="ui centered grid" style="width: 80%">
+        <div style="font-size: 1.3rem; font-weight: bolder">
+            Editando: {{$setor->nome}}
+        </div>
+        <form class="ui form" action="{{route('setores.update', ['setore', $setor->id])}}" style="width: 100%;" method="POST">
+            @csrf
+            <div class="column" style="margin: 5rem 0">
+                <div class="ui labeled fluid input @error('nome') error @enderror" @error('nome') data-content="{{$message}}" @enderror>
+                    <div class="ui label">
+                    Nome
+                    </div>
+                    <input name="nome" type="text" value="{{old('nome') ?? $setor->nome ?? ''}}" placeholder="Financeiro">
+                </div>
+            </div>
+            <div class="column" style="margin: 5rem 0">
+                <div class="ui labeled fluid input @error('gestor') error @enderror" @error('gestor') data-content="{{$message}}" @enderror>
+                    <div class="ui label">
+                    Gestor
+                    </div>
+                    <input name="gestor" type="text" value="{{old('gestor') ?? $setor->gestor ?? ''}}" placeholder="Financeiro">
+                </div>
+            </div>
+            <button class="ui button" type="submit">Enviar</button>
+        </form>
     </div>
-    @foreach ($categoria->subcategorias as $subcategoria)
-    <div style="display: flex; width: 100%; padding: .6rem">
-        <div style="flex:1">{{$subcategoria->nome}}</div>
-        <div style="display:flex; flex:1; justify-content:end">
-            <form style="display: inline" action="{{route('categorias.destroy',['categoria'=>$subcategoria->id])}}" method="POST">
-                @csrf
-                @method('delete')
-                <button class="ui red button" type="submit">Apagar</a>
-            </form>
-        <button class="ui primary button">Editar</button></div>
-    </div>      
-    @endforeach
-@endforeach
 </div>
 @endsection

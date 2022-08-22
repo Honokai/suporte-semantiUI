@@ -42,6 +42,7 @@
                         </button>
                     </form>
                 @endif
+                <button class="ui primary button" onclick="abrirModal('{{route('setores.edit', ['setore' => $setor->id])}}')">Editar</button>
             </div>
         </div>
     @endforeach
